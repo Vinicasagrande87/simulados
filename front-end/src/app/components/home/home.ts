@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,18 +9,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.css']
 })
 export class HomeComponent {
+  showTooltip(event: MouseEvent) {
+    const tooltip = document.getElementById('tooltip');
+    const target = event.target as SVGPathElement;
+    const name = target.getAttribute('data-name');
+    if (tooltip && name) {
+      tooltip.innerText = name;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (event.clientX + 15) + 'px';
+      tooltip.style.top = (event.clientY + 15) + 'px';
+    }
+  }
 
-  constructor(private router: Router) {}
+  hideTooltip() {
+    const tooltip = document.getElementById('tooltip');
+    if (tooltip) tooltip.style.display = 'none';
+  }
 
   navegar(destino: string) {
     console.log('Navegando para:', destino);
-    
-    // Como você está no projeto Simulado Medicina, pode direcionar as rotas aqui
-    if (destino === 'petala1') {
-      // this.router.navigate(['/outra-rota']); 
-      alert('Você clicou na Pétala 1!');
-    } else {
-      alert('Navegando para: ' + destino);
-    }
   }
 }

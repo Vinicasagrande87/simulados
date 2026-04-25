@@ -1,24 +1,55 @@
+/* Container que centraliza a rosa na tela entre header e footer */
 .rosa-container {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80vh; /* Mantém a altura para centralização */
+  overflow: hidden;
+}
+
+.canvas {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* O "Rótulo" flutuante (Tooltip) que segue o mouse */
+.tooltip {
+  position: fixed; /* Fixed para não quebrar o layout */
+  display: none;
+  background-color: #ffcc00; /* Amarelo Ulbra */
+  color: #00241c; /* Verde escuro para contraste */
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  pointer-events: none; /* Mouse ignora o texto */
+  z-index: 9999;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  font-size: 14px;
+  white-space: nowrap;
+  border: 1px solid #00241c;
+}
+
+/* Estilização do SVG */
 svg {
-  width: 550px !important; /* Aqui você controla o tamanho dela */
+  width: 550px !important; /* Tamanho espetacular da rosa */
   height: auto;
-  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6)); /* Sombra para profundidade */
 }
 
-/* Remove as bordas brancas (stroke) que o Inkscape coloca */
+/* --- O AJUSTE DOS 100% ESTÁ AQUI --- */
 path {
-  fill: #ffcc00 !important; 
-  stroke: none !important; 
-  stroke-width: 0 !important;
+  fill: #ffcc00 !important; /* Amarelo puro */
+  stroke: none !important;  /* REMOVIDA A BORDA BRANCA! */
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: fill 0.2s ease; /* Transição suave apenas na cor */
 }
 
+/* Efeito quando passa o mouse na pétala */
 path:hover {
-  transform: scale(1.05);
+  fill: #fff0b3 !important; /* Amarelo clarinho ao tocar */
 }
