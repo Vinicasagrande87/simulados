@@ -1,5 +1,5 @@
 const connection = require('../database/connection');
-// estou criando uma variacel(connection) e estanciano nela as funcionalidades do conection que esta no database
+// estou criando uma variavel(connection) e estanciando nela as funcionalidades do conection que esta no database
 
 module.exports = {
 // inicio da criação do metedo que sera exportado para o banco

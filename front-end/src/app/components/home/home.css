@@ -1,0 +1,24 @@
+.rosa-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  width: 550px !important; /* Aqui você controla o tamanho dela */
+  height: auto;
+  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
+}
+
+/* Remove as bordas brancas (stroke) que o Inkscape coloca */
+path {
+  fill: #ffcc00 !important; 
+  stroke: none !important; 
+  stroke-width: 0 !important;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+path:hover {
+  transform: scale(1.05);
+}

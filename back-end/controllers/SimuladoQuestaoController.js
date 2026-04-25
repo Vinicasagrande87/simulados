@@ -1,7 +1,9 @@
 const connection = require('../database/connection');
+// criação de uma variavel (connection) e atribuindo a ela a conexão com o banco de dados 
 
 module.exports = {
-    async create(req, res) {
+//dentro das chaves vai as funções de resposta as requisições dos usuarios
+    async create(req, res) {            
         const { simulado_id, questao_id } = req.body;
 
         try {

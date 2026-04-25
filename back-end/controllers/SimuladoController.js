@@ -88,16 +88,24 @@ module.exports = {
 
             // TRAVA DE SEGURANÇA: Verifica se o aluno tem o semestre necessário
             if (usuario_id) {
+// aqui verificamos se ha algum dado digitado pelo usuario na coluna usuario id
                 const usuario = await connection('usuarios')
+// aqui estou fazendo a ponte para a tabela usuarios e usando await informa para o sitema não travar
+//devido a essa busca, logo tendo sido feita, guardo essa ponte(conexão) dentro da varial usuario
                     .where('id', usuario_id)
                     .select('semestre_atual', 'tipo')
                     .first();
+// where(onde id é igual ao usuario_id)select(selecione semestre_atual e tipo) e mostre só a primeira linha first
+
 
                 if (usuario && usuario.tipo === 'aluno' && usuario.semestre_atual < simulado.semestre_referencia) {
+//se usuario existir, se usuario.tipo foi igual a aluno, se usuario.semestre_atual for menor 
+// que simulado.semestre_referencia ai então retorne o que esta abaixo
                     return res.status(403).json({ 
                         error: 'Acesso negado.', 
                         details: `Este simulado é para o ${simulado.semestre_referencia}º semestre. Você está no ${usuario.semestre_atual}º.` 
                     });
+// mensagem de acesso acesso negado
                 }
             }
 
@@ -113,23 +121,29 @@ module.exports = {
 
             // Aqui está o segredo: para cada questão, buscamos suas alternativas
             const simuladoCompleto = await Promise.all(
-                questoes.map(async (questao) => {
+// com o formulario quase todo pronto para ser enviado ao usuario requisitante, ainda falta as alternativas
+// o promise entrega somente o formulario todo pronto, com esse formulario atribuido a variavel 
+// simuladoCompleto
+                questoes.map(async (questao) => {       
+// aqui se inicia a tranfomação da promessa acima feita, pegamo o ARRAY questoes e informamos que ele sera 
+//substituido por um nova com um nov atributo(alternativas)
                     const alternativas = await connection('alternativas')
-                        .where('questao_id', questao.id)
+//uso a variavel atribuida connection para ir ate a tabela alternativas e atribuo essa conexão na variavel 
+// alternativas 
+                        .where('questao_id', questao.id)        
+// aqu a comparação, onde, coluna questao_id tiver a mesmo informação dada pelo usario no questão id
                         .select('*');
+// seleciona a linha toda
                     
-                    return {
-                        ...questao,
-                        alternativas // Coloca as alternativas dentro da questão
-                    };
+                    return {...questao, alternativas};  
+// aqui estou fazendo um Spread Operator (Operador de Espalhamento) pegando o array questão e pondo junto com
+// o resultado da variavel alternativas
                 })
             );
 
-            // Retorna o objeto do simulado com a lista de questões "recheadas"
-            return res.json({
-                ...simulado,
-                questoes: simuladoCompleto
-            });
+          
+            return res.json({...simulado, Questoes: simuladoCompleto });
+// retorna ao front as informações do array simulado, depois a chave(titulo Questoes) e o restante do simulado
 
         } catch (error) {
             console.error("Erro ao montar simulado:", error.message);

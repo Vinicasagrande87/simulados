@@ -1,0 +1,32 @@
+/* Garante que o fundo cubra a tela toda, mesmo atrás do rodapé */
+html, body {
+  height: 100% !important;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
+  overflow: hidden; /* Evita que a página fique "sambando" */
+}
+
+/* Container que segura o Header, Main e Footer */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Altura total da tela */
+}
+
+/* O segredo: flex: 1 faz o meio da página crescer e centralizar a rosa */
+.main-content {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo do Rodapé */
+.footer-ulbra {
+  background-color: rgba(33, 37, 41, 0.9);
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  width: 100%;
+}
