@@ -13,5 +13,17 @@ module.exports = {
     migrations: {
       directory: './database/migrations'
     }
+  },
+
+  production: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL, // O Render/Railway vai preencher isso
+    migrations: {
+      directory: './database/migrations'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    }
   }
 };
