@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http'; // Importação necessária
 
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.html', // Mudamos de app.component.html para app.html
-  styleUrl: './app.css'      // Verifique se o seu arquivo de estilo é app.css ou app.component.css
-})
-export class AppComponent {
-  title = 'front-end';
-}
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient() // Habilita o uso do ApiService
+  ]
+};
