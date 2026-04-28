@@ -3,7 +3,8 @@ require('dotenv').config();
 module.exports = {
   development: {
     client: 'pg',
-    connection: {
+    // Se existir DATABASE_URL, usa ela. Se não, usa os campos separados (local)
+    connection: process.env.DATABASE_URL || {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USER,
@@ -17,7 +18,10 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL, // O Render/Railway vai preencher isso
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false } // ESSENCIAL para o Supabase no Render
+    },
     migrations: {
       directory: './database/migrations'
     },
