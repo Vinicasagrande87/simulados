@@ -10,10 +10,25 @@ const SimuladoController = require('./controllers/SimuladoController');
 const SimuladoQuestaoController = require('./controllers/SimuladoQuestaoController');
 const HistoricoController = require('./controllers/HistoricoController');
 
-// --- ROTAS DE USUÁRIO E AUTENTICAÇÃO ---
+const authMiddleware = require('./middlewares/auth');
+// Importando o middleware de autenticação (o nosso porteiro)
+
+// --- ROTAS ABERTAS (Não precisam de token) ---
+
 routes.post('/login', UsuarioController.login);
-routes.get('/usuarios', UsuarioController.index);
+// rota para realizar o login e receber o token JWT
+
 routes.post('/usuarios', UsuarioController.create);
+// rota para cadastrar um novo usuario (aluno ou professor)
+
+// --- PROTEÇÃO ---
+// A partir desta linha, o sistema vai exigir o token para qualquer rota abaixo
+routes.use(authMiddleware);
+
+// --- ROTAS PROTEGIDAS (Exigem o token no cabeçalho da requisição) ---
+
+// --- ROTAS DE USUÁRIO ---
+routes.get('/usuarios', UsuarioController.index);
 
 // --- ROTAS DE DISCIPLINAS ---
 routes.get('/disciplinas', DisciplinaController.index);
@@ -22,6 +37,8 @@ routes.post('/disciplinas', DisciplinaController.create);
 // --- ROTAS DE QUESTÕES ---
 routes.get('/questoes', QuestaoController.index);
 routes.post('/questoes', QuestaoController.create);
+routes.get('/questoes/:id', QuestaoController.show); // ADICIONADO: Para ver detalhes de uma questão
+routes.delete('/questoes/:id', QuestaoController.delete); // ADICIONADO: Para o professor poder excluir questão
 
 // --- ROTAS DE ALTERNATIVAS ---
 routes.get('/questoes/:id_questao/alternativas', AlternativaController.show);
@@ -38,6 +55,7 @@ routes.get('/simulados/:id_simulado/questoes', SimuladoQuestaoController.index);
 routes.post('/simulados/questoes', SimuladoQuestaoController.create);
 
 // --- ROTAS DE HISTÓRICO ---
+routes.get('/historico', HistoricoController.index); // ADICIONADO: Para listar o histórico (Notas)
 routes.post('/historico', HistoricoController.create);
 
 module.exports = routes;

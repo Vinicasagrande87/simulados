@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home'; // Removido o .component
+import { HomeComponent } from './pages/home/home'; // Caminho atualizado para pages
+import { LoginComponent } from './pages/login/login'; 
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent }, // Define a Home como página inicial
-];
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent },
+  { path: '**', redirectTo: 'login' }
+];  

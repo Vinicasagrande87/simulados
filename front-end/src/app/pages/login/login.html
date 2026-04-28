@@ -1,0 +1,8 @@
+<div class="login-container">
+  <form (ngSubmit)="fazerLogin()">
+    <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="E-mail" required>
+    <input type="password" [(ngModel)]="usuario.senha" name="senha" placeholder="Senha" required>
+    
+    <button type="submit">Entrar</button>
+  </form>
+</div>

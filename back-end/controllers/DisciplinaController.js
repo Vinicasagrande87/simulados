@@ -27,6 +27,13 @@ module.exports = {
         const { nome } = req.body;
 // pegando a requisição do usuario e preenchendo na coluna nome da tabela disciplinas
 
+        // --- ADIÇÃO DE SEGURANÇA ---
+        // Verifica se o usuário que está tentando criar é um professor
+        // O valor req.usuarioTipo foi injetado pelo nosso middleware de auth
+        if (req.usuarioTipo !== 'professor') {
+            return res.status(403).json({ error: 'Acesso negado. Apenas professores podem criar disciplinas.' });
+        }
+
         try {
             await connection('disciplinas').insert({ nome });
 // await que nos da a segurança do app nao travar devido a sua busca no banco
