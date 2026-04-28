@@ -2,29 +2,33 @@ require('dotenv').config();
 // ligando as chaves do arquivo .env
 
 const express = require('express');
-// instanciando o framework express em uma variavel chamada express
+// instanciando o framework express
 
 const cors = require('cors');
-// instanciando o biblioteca cors, responsavel por permitir a comunicação entre back e front
+// instanciando a biblioteca cors
 
 const routes = require('./routes'); 
-// Importando o arquivo de rotas que criamos
+// Importando o arquivo de rotas
 
 const app = express();
-// instanciando as aplicações do express na variavel app
 
-const PORT = process.env.PORT || 3000;
-// informando a porta que a aplicação vai funcionar
-
-app.use(cors());
-// Habilita o CORS para comunicações externas (Front-end <-> Back-end)
+// --- CONFIGURAÇÃO DO CORS ---
+// Colocamos opções extras para garantir que o navegador não bloqueie nada
+app.use(cors({
+    origin: '*', // Permite que qualquer endereço acesse (ideal para resolver o erro agora)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
-// ligando o middleware que faz a tradução do express e json
+// middleware que faz a tradução de JSON
 
 app.use(routes); 
 // Ligando o arquivo de rotas na aplicação
 
-app.listen(PORT, ()=>{
-    console.log(`Servidor ligado na porta ${PORT}`)
+const PORT = process.env.PORT || 10000; 
+// O Render usa preferencialmente a porta 10000
+
+app.listen(PORT, () => {
+    console.log(`Servidor ligado na porta ${PORT}`);
 });
