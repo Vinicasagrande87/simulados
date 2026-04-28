@@ -1,112 +1,112 @@
 .login-container {
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Fundo degradê total, sem divisões */
   background: linear-gradient(135deg, #004d40 0%, #00241a 100%);
+  margin: 0;
+  padding: 0;
 }
 
 .login-card {
   background: white;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  width: 90%;
   max-width: 400px;
   text-align: center;
+  z-index: 1;
+}
+
+.login-header {
+  margin-bottom: 20px;
 }
 
 .logo-ulbra {
-  width: 160px;
-  margin-bottom: 20px;
+  width: 140px;
+  height: auto;
+  margin-bottom: 10px;
 }
 
 h2 {
   color: #333;
-  margin-bottom: 10px;
-  font-family: sans-serif;
+  font-size: 20px;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-p {
+.subtitle {
   color: #666;
-  margin-bottom: 30px;
   font-size: 14px;
+  margin-bottom: 25px;
 }
 
-/* Estilização dos grupos de entrada para manter o alinhamento */
 .input-group {
   text-align: left;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .input-group label {
   display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
   margin-bottom: 5px;
-  color: #555;
-  font-size: 14px;
-  font-weight: 600;
 }
 
 input {
   width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
+  padding: 12px;
+  border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 16px;
-  transition: border-color 0.3s;
 }
 
 input:focus {
   outline: none;
   border-color: #ffc107;
-  box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
 }
 
-button {
+.btn-entrar {
   width: 100%;
   padding: 15px;
-  background-color: #ffc107; /* Amarelo Ulbra */
+  background-color: #ffc107;
   color: #000;
   border: none;
   border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
   margin-top: 10px;
+  transition: transform 0.1s;
 }
 
-button:hover {
-  background-color: #e0a800;
+.btn-entrar:active {
+  transform: scale(0.98);
 }
 
-/* Novas classes para as opções de Cadastro e Esqueci Senha */
 .opcoes-extras {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1px solid #eee;
-  padding-top: 20px;
 }
 
 .opcoes-extras a {
-  color: #004d40; /* Verde escuro para combinar com o tema */
+  color: #004d40;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s;
 }
 
 .opcoes-extras a:hover {
-  color: #ffc107;
   text-decoration: underline;
 }
 
-/* Ajuste para o link de voltar que deve ter destaque diferente */
 .link-voltar {
-  font-weight: bold !important;
   color: #666 !important;
+  font-weight: bold;
 }

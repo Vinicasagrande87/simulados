@@ -1,15 +1,17 @@
 <div class="login-container">
   <div class="login-card">
-    <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
-    <h2>Simulado Medicina Ulbra</h2>
+    <div class="login-header">
+      <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
+      <h2>Simulado Medicina Ulbra</h2>
+    </div>
     
-    <p>{{ modo === 'login' ? 'Acesse sua conta' : (modo === 'cadastro' ? 'Crie sua conta gratuita' : 'Recuperação de acesso') }}</p>
+    <p class="subtitle">{{ modo === 'login' ? 'Acesse o sistema' : (modo === 'cadastro' ? 'Crie sua conta' : 'Recupere sua senha') }}</p>
 
     <form (ngSubmit)="modo === 'login' ? fazerLogin() : (modo === 'cadastro' ? fazerCadastro() : recuperarSenha())">
       
       <div class="input-group" *ngIf="modo === 'cadastro'">
         <label>Nome Completo</label>
-        <input type="text" [(ngModel)]="usuario.nome" name="nome" placeholder="Digite seu nome" required>
+        <input type="text" [(ngModel)]="usuario.nome" name="nome" placeholder="Seu nome" required>
       </div>
 
       <div class="input-group">
@@ -22,18 +24,15 @@
         <input type="password" [(ngModel)]="usuario.senha" name="senha" placeholder="******" required>
       </div>
 
-      <button type="submit">
-        {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar Instruções') }}
+      <button type="submit" class="btn-entrar">
+        {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar e-mail') }}
       </button>
     </form>
 
     <div class="opcoes-extras">
       <a href="javascript:void(0)" (click)="modo = 'cadastro'" *ngIf="modo === 'login'">Ainda não tenho conta</a>
       <a href="javascript:void(0)" (click)="modo = 'recuperar'" *ngIf="modo === 'login'">Esqueci minha senha</a>
-      
-      <a href="javascript:void(0)" (click)="modo = 'login'" *ngIf="modo !== 'login'" class="link-voltar">
-        Voltar para o Login
-      </a>
+      <a href="javascript:void(0)" (click)="modo = 'login'" *ngIf="modo !== 'login'" class="link-voltar">Voltar para o Login</a>
     </div>
   </div>
 </div>
