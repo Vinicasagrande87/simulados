@@ -1,8 +1,36 @@
 <div class="login-container">
-  <form (ngSubmit)="fazerLogin()">
-    <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="E-mail" required>
-    <input type="password" [(ngModel)]="usuario.senha" name="senha" placeholder="Senha" required>
+  <div class="login-card">
+    <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo">
     
-    <button type="submit">Entrar</button>
-  </form>
+    <h2>{{ modo === 'login' ? 'Acessar Sistema' : (modo === 'cadastro' ? 'Criar Conta' : 'Recuperar Senha') }}</h2>
+
+    <form (ngSubmit)="modo === 'login' ? fazerLogin() : (modo === 'cadastro' ? fazerCadastro() : recuperarSenha())">
+      
+      <div class="input-group" *ngIf="modo === 'cadastro'">
+        <label>Nome Completo</label>
+        <input type="text" [(ngModel)]="usuario.nome" name="nome" required>
+      </div>
+
+      <div class="input-group">
+        <label>E-mail</label>
+        <input type="email" [(ngModel)]="usuario.email" name="email" required>
+      </div>
+
+      <div class="input-group" *ngIf="modo !== 'recuperar'">
+        <label>Senha</label>
+        <input type="password" [(ngModel)]="usuario.senha" name="senha" required>
+      </div>
+
+      <button type="submit" class="btn-principal">
+        {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar E-mail') }}
+      </button>
+    </form>
+
+    <div class="opcoes-extras">
+      <a href="javascript:void(0)" (click)="modo = 'cadastro'" *ngIf="modo === 'login'">Ainda não tenho conta</a>
+      <a href="javascript:void(0)" (click)="modo = 'recuperar'" *ngIf="modo === 'login'">Esqueci minha senha</a>
+      
+      <a href="javascript:void(0)" (click)="modo = 'login'" *ngIf="modo !== 'login'">Voltar para o Login</a>
+    </div>
+  </div>
 </div>

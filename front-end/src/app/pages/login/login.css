@@ -10,7 +10,7 @@
   background: white;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -23,13 +23,28 @@
 
 h2 {
   color: #333;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-family: sans-serif;
 }
 
 p {
   color: #666;
   margin-bottom: 30px;
   font-size: 14px;
+}
+
+/* Estilização dos grupos de entrada para manter o alinhamento */
+.input-group {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 input {
@@ -40,12 +55,19 @@ input {
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ffc107;
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
 }
 
 button {
   width: 100%;
   padding: 15px;
-  background-color: #ffc107;
+  background-color: #ffc107; /* Amarelo Ulbra */
   color: #000;
   border: none;
   border-radius: 6px;
@@ -53,8 +75,38 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s;
+  margin-top: 10px;
 }
 
 button:hover {
   background-color: #e0a800;
+}
+
+/* Novas classes para as opções de Cadastro e Esqueci Senha */
+.opcoes-extras {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.opcoes-extras a {
+  color: #004d40; /* Verde escuro para combinar com o tema */
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.opcoes-extras a:hover {
+  color: #ffc107;
+  text-decoration: underline;
+}
+
+/* Ajuste para o link de voltar que deve ter destaque diferente */
+.link-voltar {
+  font-weight: bold !important;
+  color: #666 !important;
 }
