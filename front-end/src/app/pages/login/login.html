@@ -1,38 +1,48 @@
 <div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
-      <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
-      <h2>Simulado Medicina Ulbra</h2>
-    </div>
-    
-    <p class="subtitle">{{ modo === 'login' ? 'Acesse o sistema' : (modo === 'cadastro' ? 'Crie sua conta' : 'Recupere sua senha') }}</p>
+  
+  <header class="page-header">
+    <h1 class="main-title animado">
+      Simulado Medicina Ulbra
+    </h1>
+  </header>
 
-    <form (ngSubmit)="modo === 'login' ? fazerLogin() : (modo === 'cadastro' ? fazerCadastro() : recuperarSenha())">
+  <main class="login-card">
+    
+    <header class="card-header">
+      <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
+    </header>
+
+    <form (ngSubmit)="modo === 'login' ? fazerLogin() : (modo === 'cadastro' ? fazerCadastro() : recuperarSenha())" aria-live="polite">
       
       <div class="input-group" *ngIf="modo === 'cadastro'">
-        <label>Nome Completo</label>
-        <input type="text" [(ngModel)]="usuario.nome" name="nome" placeholder="Seu nome" required>
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" [(ngModel)]="usuario.nome" name="nome" placeholder="Seu nome completo" required>
       </div>
 
       <div class="input-group">
-        <label>E-mail</label>
-        <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="seu@email.com" required>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" [(ngModel)]="usuario.email" name="email" placeholder="exemplo@ulbra.br" required>
       </div>
 
       <div class="input-group" *ngIf="modo !== 'recuperar'">
-        <label>Senha</label>
-        <input type="password" [(ngModel)]="usuario.senha" name="senha" placeholder="******" required>
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" [(ngModel)]="usuario.senha" name="senha" placeholder="Sua senha" required>
       </div>
 
-      <button type="submit" class="btn-entrar">
-        {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar e-mail') }}
-      </button>
+      <div class="actions">
+        <button type="submit" class="btn-entrar">
+          {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar e-mail') }}
+        </button>
+      </div>
     </form>
 
-    <div class="opcoes-extras">
-      <a href="javascript:void(0)" (click)="modo = 'cadastro'" *ngIf="modo === 'login'">Ainda não tenho conta</a>
-      <a href="javascript:void(0)" (click)="modo = 'recuperar'" *ngIf="modo === 'login'">Esqueci minha senha</a>
-      <a href="javascript:void(0)" (click)="modo = 'login'" *ngIf="modo !== 'login'" class="link-voltar">Voltar para o Login</a>
-    </div>
-  </div>
+    <footer class="opcoes-extras">
+      <nav aria-label="Navegação de login" class="nav-links">
+        <a (click)="modo = 'cadastro'" *ngIf="modo === 'login'" role="button">Ainda não tenho conta</a>
+        <a (click)="modo = 'recuperar'" *ngIf="modo === 'login'" role="button">Esqueci minha senha</a>
+        <a (click)="modo = 'login'" *ngIf="modo !== 'login'" role="button" class="link-voltar">Voltar para o Login</a>
+      </nav>
+    </footer>
+
+  </main>
 </div>

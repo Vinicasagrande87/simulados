@@ -19,13 +19,22 @@ routes.post('/login', UsuarioController.login);
 // rota para realizar o login e receber o token JWT
 
 routes.post('/usuarios', UsuarioController.create);
-// rota para cadastrar um novo usuario (aluno ou professor)
+// rota para cadastrar um novo usuario (Aqui o sistema forçará como 'aluno')
 
 // --- PROTEÇÃO ---
 // A partir desta linha, o sistema vai exigir o token para qualquer rota abaixo
 routes.use(authMiddleware);
 
 // --- ROTAS PROTEGIDAS (Exigem o token no cabeçalho da requisição) ---
+
+// --- ROTA EXCLUSIVA DE ADMIN ---
+// Esta rota permite cadastrar professores. Ela verifica se o seu tipo é 'admin' antes de chamar o controller.
+routes.post('/admin/cadastrar-professor', (req, res, next) => {
+    if (req.usuarioTipo !== 'admin') {
+        return res.status(403).json({ error: 'Acesso negado. Rota exclusiva para o administrador.' });
+    }
+    next();
+}, UsuarioController.create);
 
 // --- ROTAS DE USUÁRIO ---
 routes.get('/usuarios', UsuarioController.index);

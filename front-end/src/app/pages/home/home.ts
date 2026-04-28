@@ -12,6 +12,7 @@ import { ApiService } from '../../services/api';
 })
 export class HomeComponent implements OnInit {
   usuarioNome: string = '';
+  isAdmin: boolean = false; // Variável para controlar o que o Admin vê
   
   // Variáveis para o Tooltip da Rosa
   tooltipText: string = '';
@@ -25,10 +26,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.usuarioNome = localStorage.getItem('usuarioNome') || 'Usuário';
+    // Pegamos os dados usando o nosso serviço
+    this.usuarioNome = localStorage.getItem('user_nome') || 'Usuário';
+    this.isAdmin = this.apiService.getTipoUsuario() === 'admin';
     
     // Proteção básica: se não tiver token, volta pro login
-    if (!localStorage.getItem('token')) {
+    if (!this.apiService.getToken()) {
       this.router.navigate(['/login']);
     }
   }
@@ -36,7 +39,13 @@ export class HomeComponent implements OnInit {
   // Função para navegar (as pétalas chamam esta função)
   navegar(modulo: string): void {
     console.log('Navegando para:', modulo);
-    // Exemplo: se modulo for 'Simulados', ele vai para /simulados
+    
+    // Lógica especial: Se o Admin clicar em "Professor", ele vai para o cadastro
+    if (modulo === 'Professor' && this.isAdmin) {
+      this.router.navigate(['/cadastro-professor']);
+      return;
+    }
+
     const rota = modulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     this.router.navigate([`/${rota}`]);
   }
@@ -44,7 +53,14 @@ export class HomeComponent implements OnInit {
   // Mostra o nome da pétala quando o mouse passa por cima
   showTooltip(event: MouseEvent): void {
     const elemento = event.target as SVGElement;
-    this.tooltipText = elemento.getAttribute('data-name') || '';
+    let nome = elemento.getAttribute('data-name') || '';
+    
+    // Troca o texto do tooltip se for Admin passando o mouse na pétala de Professor
+    if (nome === 'Professor' && this.isAdmin) {
+      nome = 'Cadastrar Professor';
+    }
+
+    this.tooltipText = nome;
     this.tooltipVisible = true;
     this.tooltipLeft = event.clientX + 10;
     this.tooltipTop = event.clientY + 10;
@@ -57,7 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.clear();
+    this.apiService.limparSessao();
     this.router.navigate(['/login']);
   }
 }

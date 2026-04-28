@@ -2,66 +2,101 @@
   height: 100vh;
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Fundo degradê total, sem divisões */
-  background: linear-gradient(135deg, #004d40 0%, #00241a 100%);
   margin: 0;
   padding: 0;
+  background-image: url('/assets/fundo app.png'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-.login-card {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  width: 90%;
-  max-width: 400px;
+/* --- TÍTULO DOURADO E SÍMBOLOS GIRATÓRIOS --- */
+.page-header {
+  margin-bottom: 30px;
   text-align: center;
-  z-index: 1;
 }
 
-.login-header {
-  margin-bottom: 20px;
+.main-title.animado {
+  color: #FFD700 !important;
+  font-size: 2.8rem;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.main-title.animado::before,
+.main-title.animado::after {
+  content: ""; 
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  background-image: url('/assets/simbol-med.png'); 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: girarMedicina 7s linear infinite;
+}
+
+.main-title.animado::after {
+  animation-direction: reverse;
+}
+
+@keyframes girarMedicina {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- CARD DE LOGIN --- */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.card-header {
+  margin-bottom: 30px;
 }
 
 .logo-ulbra {
-  width: 140px;
+  width: 240px; /* Logo ainda maior como solicitado */
   height: auto;
-  margin-bottom: 10px;
+  margin: 0 auto;
 }
 
-h2 {
-  color: #333;
-  font-size: 20px;
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.subtitle {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 25px;
-}
-
+/* --- FORMULÁRIO --- */
 .input-group {
   text-align: left;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .input-group label {
   display: block;
   font-size: 13px;
-  font-weight: bold;
-  color: #444;
-  margin-bottom: 5px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 6px;
 }
 
 input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 14px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
   box-sizing: border-box;
   font-size: 16px;
 }
@@ -69,44 +104,65 @@ input {
 input:focus {
   outline: none;
   border-color: #ffc107;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
 }
 
 .btn-entrar {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   background-color: #ffc107;
   color: #000;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.1s;
+  margin-top: 15px;
+  transition: all 0.2s;
 }
 
-.btn-entrar:active {
-  transform: scale(0.98);
+.btn-entrar:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
 }
 
+/* --- RODAPÉ DO CARD --- */
 .opcoes-extras {
   margin-top: 25px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.nav-links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .opcoes-extras a {
   color: #004d40;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .opcoes-extras a:hover {
   text-decoration: underline;
+  color: #00241a;
 }
 
 .link-voltar {
   color: #666 !important;
-  font-weight: bold;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .main-title.animado {
+    font-size: 1.8rem;
+    gap: 10px;
+  }
+  .logo-ulbra {
+    width: 180px;
+  }
 }

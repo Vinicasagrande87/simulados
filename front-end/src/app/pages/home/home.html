@@ -1,6 +1,13 @@
 <div class="rosa-container">
+  <div class="welcome-header" style="text-align: center; margin-bottom: 20px; color: white;">
+    <h2>Bem-vindo, {{ usuarioNome }}</h2>
+    <p *ngIf="isAdmin" style="color: #ffd700;">Painel do Administrador Ativo</p>
+  </div>
+
   <div class="canvas">
-    <div class="tooltip" id="tooltip"></div>
+    <div class="tooltip" [style.left.px]="tooltipLeft" [style.top.px]="tooltipTop" [style.display]="tooltipVisible ? 'block' : 'none'">
+      {{ tooltipText }}
+    </div>
 
     <svg version="1.1" width="276" height="291" viewBox="0 0 276 291" xmlns="http://www.w3.org/2000/svg">
       <g id="rosa-interativa">
@@ -13,7 +20,11 @@
         <path id="path6" (click)="navegar('Aluno')" data-name="Aluno" (mousemove)="showTooltip($event)" (mouseleave)="hideTooltip()" 
           d="m 222.50386,164.84821 c -2.2,-0.38928 -9.09118,-2.20907 -15.31372,-4.04397 l -11.31372,-3.33617 0.81372,-6.6018 c 2.45544,-19.92118 -0.12619,-34.77533 -8.05728,-46.35987 l -4.33654,-6.334175 5.60377,-7.10984 c 10.63029,-13.48729 17.38843,-17.01292 27.32272,-14.2539 5.12167,1.42243 9.16352,5.08316 14.41725,13.05781 7.18901,10.912245 12.65329,14.816215 22.88041,16.347015 2.74087,0.41025 5.35298,0.97349 5.8047,1.25163 0.45172,0.27815 -1.27388,2.51327 -3.83468,4.96694 -7.37603,7.06748 -8.87313,11.49267 -8.93471,26.40949 -0.0503,12.19178 -0.14378,12.72487 -3.05192,17.40946 -4.48784,7.22925 -12.3557,10.30393 -22,8.59738 z" />
 
-        <path id="path9" (click)="navegar('Professor')" data-name="Professor" (mousemove)="showTooltip($event)" (mouseleave)="hideTooltip()" 
+        <path id="path9" 
+          [ngClass]="{'admin-active': isAdmin}"
+          (click)="navegar('Professor')" 
+          data-name="Professor" 
+          (mousemove)="showTooltip($event)" (mouseleave)="hideTooltip()" 
           d="m 140.00386,93.72101 c -6.78806,-2.26393 -17.79752,-2.4858 -22.65424,-0.45653 -1.97451,0.825 -3.70332,1.5 -3.84181,1.5 -0.8038,0 -10.94473,-16.572945 -12.06884,-19.723665 -2.29126,-6.42205 -1.80401,-12.30308 1.44361,-17.42404 3.63321,-5.728984 7.61881,-8.178609 17.34968,-10.663441 13.03659,-3.328968 18.32612,-7.40621 22.83651,-17.602687 1.20659,-2.727702 2.47288,-4.289019 3.21323,-3.961858 0.67202,0.296971 2.57985,3.31549 4.23961,6.707819 3.37284,6.893636 9.42904,11.821996 16.82491,13.691644 14.79604,3.740377 19.2226,6.380997 22.68442,13.532163 3.84549,7.94372 1.19556,17.806 -8.09976,30.14498 l -3.918,5.200925 -3.47254,-1.45092 c -1.9099,-0.79801 -6.5245,-1.44605 -10.25466,-1.4401 -5.83749,0.009 -9.19619,0.64873 -17.28212,3.29007 -0.825,0.26949 -3.975,-0.33547 -7,-1.34436 z" />
 
         <path id="path5" (click)="navegar('Simulados')" data-name="Simulados" (mousemove)="showTooltip($event)" (mouseleave)="hideTooltip()" 
@@ -25,5 +36,9 @@
         <path id="path7" (click)="navegar('Suporte')" data-name="Suporte" (mousemove)="showTooltip($event)" (mouseleave)="hideTooltip()" d="m 103.00386,124.80199 c 0,-3.09688 4.65311,-12.49791 8.15513,-16.47641 6.92588,-7.86821 15.19275,-10.668675 25.29972,-8.570475 l 5.54515,1.151175 v 12.4291 12.4291 h -19.5 c -11.82666,0 -19.5,-0.37874 -19.5,-0.96249 z" />
       </g>
     </svg>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <button (click)="logout()" class="logout-btn">Sair do Sistema</button>
+    </div>
   </div>
 </div>
