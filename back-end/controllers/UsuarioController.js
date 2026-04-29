@@ -44,17 +44,17 @@ module.exports = {
             // Inserção tratada
             await connection('usuarios').insert({
                 nome: nomeFinal,
-                email: email.toLowerCase().trim(), // Evita erros de digitação e duplicidade boba
+                email: email.toLowerCase().trim(),
                 senha: senhaCriptografada,
                 tipo: tipoFinal,
-                // TRATAMENTO CRÍTICO: Se for vazio ou não for número, vira null para o banco aceitar
-                semestre_atual: (semestre_atual && !isNaN(semestre_atual)) ? parseInt(semestre_atual) : null
+                // AJUSTE: Se o semestre vier vazio, gravamos '1' para não dar erro de campo obrigatório no banco
+                semestre_atual: (semestre_atual && !isNaN(semestre_atual)) ? parseInt(semestre_atual) : 1
             });
 
             return res.status(201).json({ message: `Usuário (${tipoFinal}) cadastrado com sucesso!` });
 
         } catch (error) {
-            // Log detalhado no terminal do Render para sabermos EXATAMENTE o que o banco disse
+            // Log detalhado no terminal para depuração
             console.error("ERRO REAL DO BANCO:", error);
 
             // Tratamento específico de e-mail duplicado (Código 23505 no Postgres)
