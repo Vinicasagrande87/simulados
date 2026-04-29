@@ -1,7 +1,12 @@
 const knex = require('knex');
 const configuration = require('../knexfile');
 
-// Aqui usamos a configuração 'development' que definimos no knexfile
-const connection = knex(configuration.development);
+// Esta lógica detecta se o sistema está no Render (production) ou no seu PC
+// Se a variável NODE_ENV for 'production', ele usa o banco do Supabase
+const config = process.env.NODE_ENV === 'production' 
+    ? configuration.production 
+    : configuration.development;
+
+const connection = knex(config);
 
 module.exports = connection;
