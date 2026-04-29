@@ -17,14 +17,19 @@ module.exports = {
 
   production: {
     client: 'pg',
-    // Passamos a URL diretamente para evitar o erro de 'URL Inválida'
-    connection: process.env.DATABASE_URL,
-    pool: {
-      min: 2,
-      max: 10
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      // Esta configuração de SSL é a que o Supabase exige para o Render
+      ssl: {
+        rejectUnauthorized: false
+      }
     },
     migrations: {
       directory: './database/migrations'
+    },
+    pool: {
+      min: 2,
+      max: 10
     }
   }
 };
