@@ -17,9 +17,13 @@ module.exports = {
 
   production: {
     client: 'pg',
-    // MUDANÇA AQUI: Passamos a URL diretamente como string
-    // O knex entende melhor assim em ambientes como o Render
-    connection: process.env.DATABASE_URL + "?ssl=true", 
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      // AJUSTE CRÍTICO: O Supabase exige isso no Render
+      ssl: {
+        rejectUnauthorized: false
+      }
+    },
     pool: {
       min: 2,
       max: 10
