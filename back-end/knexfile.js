@@ -19,7 +19,7 @@ module.exports = {
     client: 'pg',
     connection: {
       connectionString: process.env.DATABASE_URL,
-      // Esta configuração de SSL é a que o Supabase exige para o Render
+      // Configuração obrigatória para o Render conversar com o Supabase
       ssl: {
         rejectUnauthorized: false
       }
