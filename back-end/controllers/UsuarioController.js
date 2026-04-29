@@ -37,8 +37,10 @@ module.exports = {
     // Criar um novo usuário (Cadastro com trava de Admin)
     async create(req, res) {
     // função assincrona para cadastrar um novo usuario (aluno ou professor)
-        const { nome, email, senha, tipo, semestre_atual } = req.body;
-        // coletando os dados enviados pelo usuario no corpo da requisição
+        
+        // AJUSTE: Pegamos 'nome' ou 'nomeCompleto' para evitar erro de campo vazio vindo do Angular
+        const { nome, nomeCompleto, email, senha, tipo, semestre_atual } = req.body;
+        const nomeFinal = nome || nomeCompleto;
 
         try {
             // --- LÓGICA DE SEGURANÇA PARA ADMIN ---
@@ -58,7 +60,7 @@ module.exports = {
             const senhaCriptografada = await bcrypt.hash(senha, salt);
 
             await connection('usuarios').insert({
-                nome,
+                nome: nomeFinal, // usando o nome tratado
                 email,
                 senha: senhaCriptografada, // salvando a senha já criptografada
                 tipo: tipoFinal, // Usa o tipo validado pela nossa trava
