@@ -37,32 +37,31 @@ module.exports = {
                 return res.status(403).json({ error: 'Acesso negado. Somente administradores criam professores.' });
             }
 
-            // Criptografia
+            // Criptografia da senha
             const salt = await bcrypt.genSalt(10);
             const senhaCriptografada = await bcrypt.hash(senha, salt);
 
-            // Inserção tratada
+            // Inserção tratada para o Supabase
             await connection('usuarios').insert({
                 nome: nomeFinal,
                 email: email.toLowerCase().trim(),
                 senha: senhaCriptografada,
                 tipo: tipoFinal,
-                // AJUSTE: Se o semestre vier vazio, gravamos '1' para não dar erro de campo obrigatório no banco
+                // AJUSTE CRÍTICO: Envia 1 se o campo vier vazio para evitar erro de NOT NULL
                 semestre_atual: (semestre_atual && !isNaN(semestre_atual)) ? parseInt(semestre_atual) : 1
             });
 
             return res.status(201).json({ message: `Usuário (${tipoFinal}) cadastrado com sucesso!` });
 
         } catch (error) {
-            // Log detalhado no terminal para depuração
-            console.error("ERRO REAL DO BANCO:", error);
+            console.error("ERRO REAL DO BANCO:", error.message);
 
-            // Tratamento específico de e-mail duplicado (Código 23505 no Postgres)
+            // Código 23505 é e-mail duplicado no Postgres
             if (error.code === '23505') {
                 return res.status(400).json({ error: 'Este e-mail já está em uso.' });
             }
 
-            return res.status(400).json({ error: 'Erro ao cadastrar. Verifique os dados ou tente outro e-mail.' });
+            return res.status(400).json({ error: 'Erro ao cadastrar: ' + error.message });
         }
     },
 
