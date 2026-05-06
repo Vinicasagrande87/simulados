@@ -9,62 +9,76 @@ const AlternativaController = require('./controllers/AlternativaController');
 const SimuladoController = require('./controllers/SimuladoController');
 const SimuladoQuestaoController = require('./controllers/SimuladoQuestaoController');
 const HistoricoController = require('./controllers/HistoricoController');
+const AlunoController = require('./controllers/AlunoController');
+const ProfessorController = require('./controllers/ProfessorController');
 
 const authMiddleware = require('./middlewares/auth');
-// Importando o middleware de autenticação (o nosso porteiro)
 
-// --- ROTAS ABERTAS (Não precisam de token) ---
-
+// --- ROTAS REALMENTE ABERTAS ---
 routes.post('/login', UsuarioController.login);
-// rota para realizar o login e receber o token JWT
 
-routes.post('/usuarios', UsuarioController.create);
-// rota para cadastrar um novo usuario (Aqui o sistema forçará como 'aluno')
+// --- MIDDLEWARE DE IDENTIFICAÇÃO OPCIONAL ---
+// Criamos uma função rápida para tentar ler o token se ele existir, mas não barrar se não existir
+const optionalAuth = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return next();
+    
+    const jwt = require('jsonwebtoken');
+    const [, token] = authHeader.split(' ');
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.usuarioId = decoded.id;
+        req.usuarioTipo = decoded.tipo;
+        next();
+    } catch (err) {
+        next(); // Se o token for inválido, apenas segue como deslogado
+    }
+};
 
-// --- PROTEÇÃO ---
-// A partir desta linha, o sistema vai exigir o token para qualquer rota abaixo
+// Cadastro de usuário usa o identificador opcional
+// Se for admin logado, cria professor. Se não for ninguém, só cria aluno.
+routes.post('/usuarios', optionalAuth, UsuarioController.create); 
+
+// --- PROTEÇÃO TOTAL (TUDO ABAIXO EXIGE TOKEN OBRIGATÓRIO) ---
 routes.use(authMiddleware);
 
-// --- ROTAS PROTEGIDAS (Exigem o token no cabeçalho da requisição) ---
+// --- ROTAS PROTEGIDAS ---
 
-// --- ROTA EXCLUSIVA DE ADMIN ---
-// Esta rota permite cadastrar professores. Ela verifica se o seu tipo é 'admin' antes de chamar o controller.
-routes.post('/admin/cadastrar-professor', (req, res, next) => {
-    if (req.usuarioTipo !== 'admin') {
-        return res.status(403).json({ error: 'Acesso negado. Rota exclusiva para o administrador.' });
-    }
-    next();
-}, UsuarioController.create);
-
-// --- ROTAS DE USUÁRIO ---
+// 1. Usuários
 routes.get('/usuarios', UsuarioController.index);
 
-// --- ROTAS DE DISCIPLINAS ---
+// 2. Perfis
+routes.post('/alunos', AlunoController.create);
+routes.get('/alunos', AlunoController.index);
+routes.post('/professores', ProfessorController.create);
+routes.get('/professores', ProfessorController.index);
+
+// 3. Disciplinas
 routes.get('/disciplinas', DisciplinaController.index);
 routes.post('/disciplinas', DisciplinaController.create);
 
-// --- ROTAS DE QUESTÕES ---
+// 4. Questões
 routes.get('/questoes', QuestaoController.index);
 routes.post('/questoes', QuestaoController.create);
-routes.get('/questoes/:id', QuestaoController.show); // ADICIONADO: Para ver detalhes de uma questão
-routes.delete('/questoes/:id', QuestaoController.delete); // ADICIONADO: Para o professor poder excluir questão
+routes.get('/questoes/:id', QuestaoController.show);
+routes.delete('/questoes/:id', QuestaoController.delete);
 
-// --- ROTAS DE ALTERNATIVAS ---
+// 5. Alternativas
 routes.get('/questoes/:id_questao/alternativas', AlternativaController.show);
 routes.post('/alternativas', AlternativaController.create);
 
-// --- ROTAS DE SIMULADOS ---
+// 6. Simulados
 routes.get('/simulados', SimuladoController.index);
 routes.post('/simulados', SimuladoController.create);
-// Rota para o aluno ver o simulado completo (Questões + Alternativas)
 routes.get('/simulados/:id', SimuladoController.show);
 
-// --- ROTAS DE VÍNCULO (QUESTÕES DENTRO DOS SIMULADOS) ---
+// 7. Vínculo Questões
 routes.get('/simulados/:id_simulado/questoes', SimuladoQuestaoController.index);
 routes.post('/simulados/questoes', SimuladoQuestaoController.create);
 
-// --- ROTAS DE HISTÓRICO ---
-routes.get('/historico', HistoricoController.index); // ADICIONADO: Para listar o histórico (Notas)
-routes.post('/historico', HistoricoController.create);
+// 8. Histórico e Tentativas
+routes.get('/historico', HistoricoController.index);
+routes.post('/tentativas', HistoricoController.create);
+routes.get('/tentativas/:id', HistoricoController.show);
 
 module.exports = routes;

@@ -1,43 +1,42 @@
 const jwt = require('jsonwebtoken');
-// importando o JWT para verificar a validade do token
+const connection = require('../database/connection');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    // capturando o cabeçalho de autorização da requisição
 
     if (!authHeader) {
         return res.status(401).json({ error: 'Token não fornecido.' });
     }
-    // se não houver cabeçalho, retorna erro 401 (Não autorizado)
 
     const parts = authHeader.split(' ');
-    // divide o cabeçalho em duas partes (Bearer e o Token)
-
     if (parts.length !== 2) {
-        return res.status(401).json({ error: 'Erro no token.' });
+        return res.status(401).json({ error: 'Erro no formato do token.' });
     }
-    // verifica se o formato tem exatamente as duas partes esperadas
 
     const [scheme, token] = parts;
 
-    if (!/^Bearer$/i.test(scheme)) {
-        return res.status(401).json({ error: 'Token malformado.' });
-    }
-    // verifica se a primeira parte é a palavra 'Bearer'
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Buscamos os dados atualizados do usuário no banco para garantir a trava de semestre
+        const usuario = await connection('usuarios')
+            .where('id', decoded.id)
+            .select('tipo', 'semestre_atual')
+            .first();
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token inválido.' });
+        if (!usuario) {
+            return res.status(401).json({ error: 'Usuário não encontrado.' });
         }
-        // verifica se o token é válido usando a chave secreta do .env
 
-        // --- IMPORTANTE PARA A TRAVA DE ADMIN ---
-        // Salvamos o ID e o TIPO (admin, professor, aluno) extraídos do token
-        // para que as rotas e controllers saibam quem está fazendo a requisição
+        // Injeta os dados necessários na requisição para os Controllers usarem
         req.usuarioId = decoded.id;
-        req.usuarioTipo = decoded.tipo; 
+        req.usuarioTipo = usuario.tipo; 
+        req.usuarioSemestre = usuario.semestre_atual; // Habilita a trava de semestre vigente
 
+        console.log(`>>> AUTH: Usuário ${decoded.id} no semestre [${usuario.semestre_atual}]`);
         return next();
-        // libera a requisição para seguir para a próxima rota
-    });
+    } catch (err) {
+        console.error("Erro na verificação do JWT:", err.message);
+        return res.status(401).json({ error: 'Token inválido ou expirado.' });
+    }
 };

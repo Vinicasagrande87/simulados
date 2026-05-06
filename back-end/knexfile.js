@@ -1,35 +1,43 @@
 require('dotenv').config();
+const path = require("path");
 
 module.exports = {
   development: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL || {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
-    },
-    migrations: {
-      directory: './database/migrations'
-    }
-  },
-
-  production: {
-    client: 'pg',
+    client: 'postgresql',
     connection: {
       connectionString: process.env.DATABASE_URL,
-      // AJUSTE CRÍTICO: O Supabase exige isso no Render
-      ssl: {
-        rejectUnauthorized: false
-      }
+      ssl: { rejectUnauthorized: false }
     },
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      directory: './database/migrations'
+      tableName: 'knex_migrations',
+      directory: path.resolve(__dirname, 'database', 'migrations')
+    },
+    seeds: {
+      // Ajustado para o local correto dentro da sua pasta database
+      directory: path.resolve(__dirname, 'database', 'seeds')
+    }
+  },
+
+  production: {
+    client: 'postgresql',
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations',
+      directory: path.resolve(__dirname, 'database', 'migrations')
+    },
+    seeds: {
+      directory: path.resolve(__dirname, 'database', 'seeds')
     }
   }
 };

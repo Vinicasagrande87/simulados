@@ -1,95 +1,122 @@
 const connection = require('../database/connection');
-// atribuindo a variavel connection o caminho até o arquivo connectio, reponsavel pela conexão com o banco
 
 module.exports = {
-// informa que o que estiver dentro das chaves ser a conexão com o banco nesse controller
     async create(req, res) {
-// função assincrona de criação
-        // Recebemos os dados brutos do Front-end/Thunder Client
-        const { id_usuario, id_simulado, acertos, total_questoes } = req.body;
-// colunas que serão criadas conforme a requisição do usuario dentro da tabela historico
+        const { id_simulado, respostas } = req.body;
+        const id_usuario = req.usuarioId; 
 
         try {
-// tratamento de excessão para o servidor não para e não aconça o the walking dead siga o comando abaixo
-            // Cálculo da nota (Regra de 3 simples para chegar na nota de 0 a 10)
-            const notaCalculada = (acertos / total_questoes) * 10;
-// criando a variavel notaCalculada e atribuindo a ela primeiro a divisão entre as colunas acertos dividido
-// por totral_questoes e apos, multiplicando por 10
+            // Busca as alternativas corretas apenas para as questões vinculadas a este simulado
+            const alternativasCorretas = await connection('alternativas')
+                .join('simulado_questoes', 'alternativas.questao_id', '=', 'simulado_questoes.questao_id')
+                .where('simulado_questoes.simulado_id', id_simulado)
+                .where('alternativas.e_correta', true) 
+                .select('alternativas.questao_id', 'alternativas.id as alternativa_id');
 
-            // Inserimos usando os nomes exatos da sua migration
-            await connection('historico_tentativas').insert({
-// await para nos dar a segurança do app não parar devido a uma busca for(BANCO) 
-//connection('historico_tentativas') uso o caminho atribuido a variavel connection para chegar ate a tabela 
-//historico_tentativas e inserir os dados abaixo
-                aluno_id: id_usuario,       // na sua migration é aluno_id
-                simulado_id: id_simulado,   // na sua migration é simulado_id
-                nota: notaCalculada         // na sua migration é nota
+            let acertos = 0;
+
+            // Compara as respostas enviadas com o gabarito oficial
+            respostas.forEach(resp => {
+                const correta = alternativasCorretas.find(alt => alt.questao_id === Number(resp.questao_id));
+                if (correta && Number(correta.alternativa_id) === Number(resp.alternativa_id)) {
+                    acertos++;
+                }
             });
 
-            return res.status(201).json({ 
-                message: 'Resultado salvo com sucesso!',
-                nota: notaCalculada.toFixed(2)
+            const total_questoes = alternativasCorretas.length;
+            const notaCalculada = total_questoes > 0 ? (acertos / total_questoes) * 10 : 0;
+
+            // Inicia transação para salvar a tentativa e os detalhes das respostas
+            const id_tentativa = await connection.transaction(async trx => {
+                const [novaTentativa] = await trx('tentativas_simulados').insert({
+                    aluno_id: id_usuario,
+                    simulado_id: id_simulado,
+                    pontuacao: notaCalculada
+                }).returning('id');
+
+                const tentativa_id = novaTentativa.id || novaTentativa;
+
+                const detalheRespostas = respostas.map(resp => ({
+                    tentativa_id: tentativa_id,
+                    questao_id: resp.questao_id,
+                    alternativa_escolhida_id: resp.alternativa_id
+                }));
+
+                await trx('respostas_tentativas').insert(detalheRespostas);
+                return tentativa_id;
             });
-// retorna ao usuario status 201 com a mesagem de sucesso, e fora das aspas mostra a coluna nota 
-// com a variavel nota calcula com o toFixed(2) para arredondar o numero caso seja necessario
-            
+
+            return res.status(201).json({
+                message: 'Simulado finalizado!',
+                nota: notaCalculada.toFixed(2),
+                acertos,
+                total: total_questoes,
+                tentativa_id: id_tentativa
+            });
+
         } catch (error) {
-// deu ruim, servidor para 
-            console.error("ERRO NO HISTÓRICO:", error.message);
+            console.error("ERRO NO HISTORICO:", error); 
             return res.status(400).json({ 
-                error: 'Erro ao salvar resultado no banco.',
-                details: error.message 
+                error: 'Erro ao salvar resultado.',
+                detalhe: error.message 
             });
-// mostra na tela para o usuario ERRO NO HISTORICO  e error.menssage informa o detalhe do erro
         }
     },
 
     async index(req, res) {
-// função assincrona de lista(ler)
-        const { usuario_id, usuario_tipo } = req.query; 
-// pegando quem está logado para decidir o que mostrar (se é aluno ou professor)
+        const usuario_id = req.usuarioId;
+        const usuario_tipo = req.usuarioTipo;
 
         try {
-//tratamento de excessão
-            let query = connection('historico_tentativas')
-// criando uma variavel historico e atribuindo a a ela a tabela hitorico_tentativas
-// a usando o await para evitar que o sistema trave fazendo essa busca 
-                .join('simulados', 'simulados.id', '=', 'historico_tentativas.simulado_id')
-// aqui estou indo até a tabela simuldos e buscando a coluna simulados.id e
-// indo ate a tabela hitorico_tentativas e buscando a coluna simulado_id
-                .join('usuarios', 'usuarios.id', '=', 'historico_tentativas.aluno_id')
-// aqui estou indo na tabela usuarios e buscando a coluna usuarios.id e
-// indo ate a coluna historico_tentativas e buscando a coluna aluno_id
-                .select([
-                    'historico_tentativas.id',
-                    'usuarios.nome as aluno_nome',
-                    'simulados.titulo as simulado_titulo',
-                    'historico_tentativas.nota',
-                    'historico_tentativas.data_realizacao'
-                ]);
+            let query = connection('tentativas_simulados')
+                .join('simulados', 'simulados.id', '=', 'tentativas_simulados.simulado_id')
+                .join('usuarios', 'usuarios.id', '=', 'tentativas_simulados.aluno_id');
 
-            // REGRA DE NEGÓCIO: Se for ALUNO, vê apenas o dele (completo)
+            // Filtro: Aluno vê apenas as suas; Professor vê de todos
             if (usuario_tipo === 'aluno') {
-                query.where('historico_tentativas.aluno_id', usuario_id)
-                     .orderBy('data_realizacao', 'desc');
-            } 
-            // REGRA DE NEGÓCIO: Se for PROFESSOR, vê a última tentativa de cada aluno
-            else if (usuario_tipo === 'professor') {
-                query.distinctOn('historico_tentativas.aluno_id')
-                     .orderBy('historico_tentativas.aluno_id')
-                     .orderBy('data_realizacao', 'desc');
+                query.where('tentativas_simulados.aluno_id', usuario_id);
             }
 
-            const historico = await query;
-// depois de ter juntado todas as informações com das tabelas e colunas com o join
-// eu seleciono (.select([) quais colunas eu quero que apareçam no meu filtro
-// e as coiloco em ordem de data de realização  .orderBy('data_realizacao', 'desc');
-            
+            const historico = await query.select([
+                'tentativas_simulados.id',
+                'usuarios.nome as aluno_nome',
+                'simulados.titulo as simulado_titulo',
+                'tentativas_simulados.pontuacao',
+                'tentativas_simulados.data_conclusao'
+            ]).orderBy('tentativas_simulados.data_conclusao', 'desc');
+
             return res.json(historico);
         } catch (error) {
-            console.error("Erro ao buscar histórico:", error.message);
             return res.status(500).json({ error: 'Erro ao buscar histórico.' });
         }
-// aqui caso de algum problema com o servidor e não possamos acessar o banco, retorna essa mensagem
+    },
+
+    async show(req, res) {
+        const { id } = req.params;
+        try {
+            const tentativa = await connection('tentativas_simulados')
+                .join('simulados', 'simulados.id', '=', 'tentativas_simulados.simulado_id')
+                .where('tentativas_simulados.id', id)
+                .select('tentativas_simulados.*', 'simulados.titulo')
+                .first();
+
+            if (!tentativa) return res.status(404).json({ error: "Registro não encontrado." });
+
+            const questoes = await connection('respostas_tentativas')
+                .join('questoes', 'questoes.id', '=', 'respostas_tentativas.questao_id')
+                .where('respostas_tentativas.tentativa_id', id)
+                .select('questoes.*', 'respostas_tentativas.alternativa_escolhida_id');
+
+            const revisao = await Promise.all(questoes.map(async q => {
+                const alternativas = await connection('alternativas')
+                    .where('questao_id', q.id)
+                    .select('id', 'texto', 'e_correta'); 
+                return { ...q, alternativas };
+            }));
+
+            return res.json({ ...tentativa, questoes: revisao });
+        } catch (error) {
+            return res.status(500).json({ error: "Erro ao carregar detalhes da tentativa." });
+        }
     }
 };
