@@ -1,0 +1,49 @@
+<div class="login-container">
+  <header class="page-header">
+    <h1 class="main-title animado">Novo Aluno</h1>
+  </header>
+
+  <main class="login-card">
+    <header class="card-header">
+      <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
+    </header>
+
+    <form (ngSubmit)="fazerCadastro()">
+      <div class="input-group">
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" [(ngModel)]="usuario.nome" name="nome" placeholder="Seu nome" required>
+      </div>
+
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" [(ngModel)]="usuario.email" name="email" placeholder="exemplo@ulbra.br" required>
+      </div>
+
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" [(ngModel)]="usuario.senha" name="senha" placeholder="Crie uma senha" required>
+      </div>
+
+      <div class="input-group">
+        <label for="curso">Curso</label>
+        <input type="text" id="curso" [(ngModel)]="usuario.curso" name="curso" placeholder="Ex: Medicina" required>
+      </div>
+
+      <div class="input-group">
+        <label for="semestre">Semestre Atual</label>
+        <select id="semestre" [(ngModel)]="usuario.semestre" name="semestre" required class="select-ulbra">
+          <option [ngValue]="null" disabled selected>Selecione</option>
+          <option *ngFor="let s of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="s">{{s}}º Semestre</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-entrar">Finalizar Cadastro</button>
+    </form>
+
+    <footer class="opcoes-extras">
+      <nav class="nav-links">
+        <a routerLink="/login" class="link-voltar">Já tenho conta? Voltar ao Login</a>
+      </nav>
+    </footer>
+  </main>
+</div>

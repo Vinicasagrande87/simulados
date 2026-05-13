@@ -33,13 +33,21 @@ module.exports = {
         const data = req.body;
 
         try {
-            // Se o usuário enviar um ARRAY de alternativas (como você fez no Insomnia)
+            // Se o usuário enviar um ARRAY de alternativas
             if (Array.isArray(data)) {
-                const alternativasFormatadas = data.map(item => ({
-                    texto: item.texto,
-                    e_correta: item.is_correta,
-                    questao_id: Number(item.id_questao)
-                }));
+                const alternativasFormatadas = data.map(item => {
+                    // Validação para evitar o erro de NaN no banco
+                    const qId = Number(item.id_questao);
+                    if (isNaN(qId)) {
+                        throw new Error(`ID da questão inválido para a alternativa: ${item.texto}`);
+                    }
+
+                    return {
+                        texto: item.texto,
+                        e_correta: item.is_correta,
+                        questao_id: qId
+                    };
+                });
 
                 await connection('alternativas').insert(alternativasFormatadas);
 
@@ -50,10 +58,17 @@ module.exports = {
 
             // Se o usuário enviar apenas UMA alternativa (objeto único)
             const { texto, is_correta, id_questao } = data;
+            
+            // Validação para evitar o erro de NaN no banco
+            const qIdUnico = Number(id_questao);
+            if (isNaN(qIdUnico)) {
+                return res.status(400).json({ error: 'O campo id_questao deve ser um número válido.' });
+            }
+
             const [result] = await connection('alternativas').insert({
                 texto,
                 e_correta: is_correta,
-                questao_id: Number(id_questao)
+                questao_id: qIdUnico
             }).returning('id');
 
             const id_gerado = result.id || result;
@@ -66,7 +81,7 @@ module.exports = {
         } catch (error) {
             console.error("Erro no banco:", error.detail || error.message);
             return res.status(400).json({ 
-                error: 'Erro ao cadastrar alternativa. Verifique se o id_questao existe.',
+                error: 'Erro ao cadastrar alternativa. Verifique os dados enviados.',
                 detalhe: error.message
             });
         }

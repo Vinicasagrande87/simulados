@@ -1,9 +1,8 @@
 const connection = require('../database/connection');
 
 module.exports = {
-    // Listar questões com trava de semestre vigente
     async index(req, res) {
-        const semestre_do_aluno = req.usuarioSemestre; // Assumindo que seu middleware injeta isso
+        const semestre_do_aluno = req.usuarioSemestre; 
         const usuario_tipo = req.usuarioTipo;
 
         try {
@@ -15,7 +14,6 @@ module.exports = {
                     'disciplinas.semestre as disciplina_semestre'
                 ]);
 
-            // TRAVA LOGICA: Se for aluno, filtra apenas disciplinas do semestre dele
             if (usuario_tipo === 'aluno') {
                 query.where('disciplinas.semestre', '=', semestre_do_aluno);
             }
@@ -28,7 +26,6 @@ module.exports = {
         }
     },
 
-    // Criar questão (ID automático do Token)
     async create(req, res) {
         const { enunciado, semestre_alvo, id_disciplina, explicacao } = req.body;
         const id_professor_logado = req.usuarioId; 
@@ -56,7 +53,6 @@ module.exports = {
         }
     },
 
-    // Mostrar uma única questão com trava de acesso
     async show(req, res) {
         const { id } = req.params;
         const usuario_tipo = req.usuarioTipo; 
@@ -73,7 +69,6 @@ module.exports = {
                 return res.status(404).json({ error: 'Questão não encontrada.' });
             }
 
-            // TRAVA DE SEGURANÇA: Impede acesso via ID direto se não for do semestre
             if (usuario_tipo === 'aluno' && questao.disciplina_semestre !== semestre_do_aluno) {
                 return res.status(403).json({ error: 'Acesso negado: Esta questão pertence a outro semestre.' });
             }
@@ -85,6 +80,40 @@ module.exports = {
             return res.json(questao);
         } catch (error) {
             return res.status(500).json({ error: 'Erro ao buscar questão.' });
+        }
+    },
+
+    // NOVO: Método para Alterar Questão (Pétala 3 do Professor)
+    async update(req, res) {
+        const { id } = req.params;
+        const { enunciado, semestre_alvo, id_disciplina, explicacao } = req.body;
+        const id_professor_logado = req.usuarioId;
+        const usuario_tipo = req.usuarioTipo;
+
+        try {
+            const questao = await connection('questoes').where('id', id).first();
+
+            if (!questao) {
+                return res.status(404).json({ error: 'Questão não encontrada.' });
+            }
+
+            // Trava de segurança: apenas o dono ou admin edita
+            if (questao.id_professor !== id_professor_logado && usuario_tipo !== 'admin') {
+                return res.status(401).json({ error: 'Sem permissão para alterar esta questão.' });
+            }
+
+            await connection('questoes')
+                .where('id', id)
+                .update({
+                    enunciado,
+                    semestre_alvo,
+                    id_disciplina,
+                    explicacao
+                });
+
+            return res.json({ message: 'Questão atualizada com sucesso!' });
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro ao atualizar questão.' });
         }
     },
 

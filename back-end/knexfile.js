@@ -1,11 +1,15 @@
 require('dotenv').config();
 const path = require("path");
 
+// Este log vai aparecer no seu terminal e nos dirá exatamente o que o Node está lendo
+console.log(">>> [DEBUG] DATABASE_URL lida:", process.env.DATABASE_URL);
+
 module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      connectionString: process.env.DATABASE_URL,
+      // Usamos .trim() para limpar qualquer sujeira do terminal
+      connectionString: (process.env.DATABASE_URL || "").trim(),
       ssl: { rejectUnauthorized: false }
     },
     pool: {
@@ -17,7 +21,6 @@ module.exports = {
       directory: path.resolve(__dirname, 'database', 'migrations')
     },
     seeds: {
-      // Ajustado para o local correto dentro da sua pasta database
       directory: path.resolve(__dirname, 'database', 'seeds')
     }
   },
@@ -25,7 +28,7 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      connectionString: process.env.DATABASE_URL,
+      connectionString: (process.env.DATABASE_URL || "").trim(),
       ssl: { rejectUnauthorized: false }
     },
     pool: {

@@ -1,5 +1,4 @@
 <div class="login-container">
-  
   <header class="page-header">
     <h1 class="main-title animado">
       Simulado Medicina Ulbra
@@ -7,18 +6,12 @@
   </header>
 
   <main class="login-card">
-    
     <header class="card-header">
       <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
     </header>
 
-    <form (ngSubmit)="modo === 'login' ? fazerLogin() : (modo === 'cadastro' ? fazerCadastro() : recuperarSenha())" aria-live="polite">
+    <form (ngSubmit)="modo === 'login' ? fazerLogin() : recuperarSenha()">
       
-      <div class="input-group" *ngIf="modo === 'cadastro'">
-        <label for="nome">Nome Completo</label>
-        <input type="text" id="nome" [(ngModel)]="usuario.nome" name="nome" placeholder="Seu nome completo" required>
-      </div>
-
       <div class="input-group">
         <label for="email">E-mail</label>
         <input type="email" id="email" [(ngModel)]="usuario.email" name="email" placeholder="exemplo@ulbra.br" required>
@@ -31,18 +24,17 @@
 
       <div class="actions">
         <button type="submit" class="btn-entrar">
-          {{ modo === 'login' ? 'Entrar' : (modo === 'cadastro' ? 'Cadastrar' : 'Enviar e-mail') }}
+          {{ modo === 'login' ? 'Entrar' : 'Enviar e-mail' }}
         </button>
       </div>
     </form>
 
     <footer class="opcoes-extras">
-      <nav aria-label="Navegação de login" class="nav-links">
-        <a (click)="modo = 'cadastro'" *ngIf="modo === 'login'" role="button">Ainda não tenho conta</a>
+      <nav class="nav-links">
+        <a routerLink="/cadastro" *ngIf="modo === 'login'">Ainda não tenho conta</a>
         <a (click)="modo = 'recuperar'" *ngIf="modo === 'login'" role="button">Esqueci minha senha</a>
         <a (click)="modo = 'login'" *ngIf="modo !== 'login'" role="button" class="link-voltar">Voltar para o Login</a>
       </nav>
     </footer>
-
   </main>
 </div>

@@ -31,7 +31,6 @@ module.exports = {
                 .first();
 
             if (aluno) {
-                // CORREÇÃO: Usando 'aluno.semestre' para bater com a migration 'alunos'
                 const simulados = await connection('simulados')
                     .where({
                         curso: aluno.curso,
@@ -80,6 +79,39 @@ module.exports = {
 
         } catch (error) {
             return res.status(500).json({ error: 'Erro ao carregar detalhes.' });
+        }
+    },
+
+    // NOVO: Método para Alterar Simulado (Pétala 3 do Professor)
+    async update(req, res) {
+        const { id } = req.params;
+        const { titulo, semestre_referencia, curso } = req.body;
+        const id_professor_logado = req.usuarioId;
+        const usuario_tipo = req.usuarioTipo;
+
+        try {
+            const simulado = await connection('simulados').where('id', id).first();
+
+            if (!simulado) {
+                return res.status(404).json({ error: 'Simulado não encontrado.' });
+            }
+
+            // Trava de segurança: apenas o dono ou admin edita
+            if (simulado.professor_id !== id_professor_logado && usuario_tipo !== 'admin') {
+                return res.status(401).json({ error: 'Sem permissão para alterar este simulado.' });
+            }
+
+            await connection('simulados')
+                .where('id', id)
+                .update({
+                    titulo,
+                    semestre_referencia,
+                    curso
+                });
+
+            return res.json({ message: 'Simulado atualizado com sucesso!' });
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro ao atualizar simulado.' });
         }
     }
 };

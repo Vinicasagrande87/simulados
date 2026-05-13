@@ -1,3 +1,4 @@
+console.log(">>> [CONTROLE]: CARREGOU O ARQUIVO DE ROTAS DE 106 LINHAS");
 const express = require('express');
 const routes = express.Router();
 
@@ -9,16 +10,25 @@ const AlternativaController = require('./controllers/AlternativaController');
 const SimuladoController = require('./controllers/SimuladoController');
 const SimuladoQuestaoController = require('./controllers/SimuladoQuestaoController');
 const HistoricoController = require('./controllers/HistoricoController');
-const AlunoController = require('./controllers/AlunoController');
+const AlunoController = require('./controllers/Alunocontroller');
 const ProfessorController = require('./controllers/ProfessorController');
+const RankingController = require('./controllers/RankingController');
+const FeedbackController = require('./controllers/FeedbackController');
 
 const authMiddleware = require('./middlewares/auth');
 
-// --- ROTAS REALMENTE ABERTAS ---
+// --- TRAVA DE SEGURANÇA (BARRAR ALUNO) ---
+const checkDocente = (req, res, next) => {
+    // O authMiddleware já injetou o usuarioTipo no req
+    if (req.usuarioTipo === 'professor' || req.usuarioTipo === 'admin') {
+        return next();
+    }
+    return res.status(403).json({ error: 'Acesso negado. Apenas professores ou admins.' });
+};
+
+// --- ROTAS ABERTAS ---
 routes.post('/login', UsuarioController.login);
 
-// --- MIDDLEWARE DE IDENTIFICAÇÃO OPCIONAL ---
-// Criamos uma função rápida para tentar ler o token se ele existir, mas não barrar se não existir
 const optionalAuth = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) return next();
@@ -31,52 +41,65 @@ const optionalAuth = (req, res, next) => {
         req.usuarioTipo = decoded.tipo;
         next();
     } catch (err) {
-        next(); // Se o token for inválido, apenas segue como deslogado
+        next();
     }
 };
 
-// Cadastro de usuário usa o identificador opcional
-// Se for admin logado, cria professor. Se não for ninguém, só cria aluno.
 routes.post('/usuarios', optionalAuth, UsuarioController.create); 
 
-// --- PROTEÇÃO TOTAL (TUDO ABAIXO EXIGE TOKEN OBRIGATÓRIO) ---
+// --- PROTEÇÃO TOTAL ---
 routes.use(authMiddleware);
 
 // --- ROTAS PROTEGIDAS ---
 
 // 1. Usuários
 routes.get('/usuarios', UsuarioController.index);
+routes.delete('/usuarios/:id', UsuarioController.delete);
+routes.post('/admin/cadastrar-professor', UsuarioController.create);
 
-// 2. Perfis
+// 2. Ranking
+routes.get('/ranking', RankingController.index);
+
+// 3. Feedbacks
+routes.post('/feedbacks', FeedbackController.create);
+routes.get('/feedbacks', FeedbackController.index);
+
+// 4. Professor - Dashboards (Só Professor/Admin vê)
+routes.get('/professor/dashboard-turma', checkDocente, ProfessorController.dashboardTurma);
+routes.get('/professor/lista-alunos', checkDocente, ProfessorController.indexAlunos);
+
+// 5. Perfis
 routes.post('/alunos', AlunoController.create);
 routes.get('/alunos', AlunoController.index);
-routes.post('/professores', ProfessorController.create);
+routes.post('/professores', checkDocente, ProfessorController.create); // Aluno não cria professor
 routes.get('/professores', ProfessorController.index);
 
-// 3. Disciplinas
+// 6. Disciplinas
 routes.get('/disciplinas', DisciplinaController.index);
-routes.post('/disciplinas', DisciplinaController.create);
+routes.post('/disciplinas', checkDocente, DisciplinaController.create); // Aluno não cria disciplina
 
-// 4. Questões
-routes.get('/questoes', QuestaoController.index);
-routes.post('/questoes', QuestaoController.create);
+// 7. Questões (BLINDAGEM AQUI)
+routes.get('/questoes', QuestaoController.index); 
+routes.post('/questoes', checkDocente, QuestaoController.create); // TRAVADO
 routes.get('/questoes/:id', QuestaoController.show);
-routes.delete('/questoes/:id', QuestaoController.delete);
+routes.put('/questoes/:id', checkDocente, QuestaoController.update); // TRAVADO
+routes.delete('/questoes/:id', checkDocente, QuestaoController.delete); // TRAVADO
 
-// 5. Alternativas
+// 8. Alternativas (BLINDAGEM AQUI)
 routes.get('/questoes/:id_questao/alternativas', AlternativaController.show);
-routes.post('/alternativas', AlternativaController.create);
+routes.post('/alternativas', checkDocente, AlternativaController.create); // TRAVADO
 
-// 6. Simulados
+// 9. Simulados
 routes.get('/simulados', SimuladoController.index);
-routes.post('/simulados', SimuladoController.create);
+routes.post('/simulados', checkDocente, SimuladoController.create); // Aluno não cria simulado
 routes.get('/simulados/:id', SimuladoController.show);
+routes.put('/simulados/:id', checkDocente, SimuladoController.update);
 
-// 7. Vínculo Questões
+// 10. Vínculo Questões
 routes.get('/simulados/:id_simulado/questoes', SimuladoQuestaoController.index);
-routes.post('/simulados/questoes', SimuladoQuestaoController.create);
+routes.post('/simulados/questoes', checkDocente, SimuladoQuestaoController.create); // TRAVADO
 
-// 8. Histórico e Tentativas
+// 11. Histórico e Tentativas (Liberado para o aluno fazer)
 routes.get('/historico', HistoricoController.index);
 routes.post('/tentativas', HistoricoController.create);
 routes.get('/tentativas/:id', HistoricoController.show);

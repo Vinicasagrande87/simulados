@@ -10,20 +10,20 @@
   background-position: center;
 }
 
-/* TÍTULO E ANIMAÇÃO DOS SÍMBOLOS */
 .main-title.animado {
   color: #FFD700;
-  font-size: 2.8rem;
+  font-size: 2.2rem;
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 15px;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  margin-bottom: 20px;
 }
 
 .main-title.animado::before, .main-title.animado::after {
   content: ""; 
-  width: 55px; height: 55px;
+  width: 40px; height: 40px;
   background-image: url('/assets/simbol-med.png'); 
   background-size: contain;
   animation: girarMedicina 7s linear infinite;
@@ -34,44 +34,43 @@
   to { transform: rotate(360deg); }
 }
 
-/* O CARD */
 .login-card {
   background: rgba(255, 255, 255, 0.95);
-  padding: 40px;
+  padding: 30px;
   border-radius: 15px;
   width: 90%;
-  max-width: 420px;
+  max-width: 400px;
   text-align: center;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
 }
 
-.logo-ulbra { width: 240px; margin-bottom: 20px; }
+.logo-ulbra { width: 180px; margin-bottom: 20px; }
 
-.input-group { text-align: left; margin-bottom: 18px; }
-.input-group label { display: block; font-weight: 700; margin-bottom: 6px; }
+.input-group { text-align: left; margin-bottom: 15px; }
+.input-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
 
 input {
   width: 100%;
-  padding: 14px;
-  border: 1px solid #bbb;
-  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .btn-entrar {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   background-color: #ffc107;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .opcoes-extras {
-  margin-top: 25px;
-  border-top: 1px solid #ddd;
-  padding-top: 20px;
+  margin-top: 15px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
 }
 
-.nav-links { display: flex; flex-direction: column; gap: 15px; }
-.nav-links a { color: #004d40; text-decoration: none; font-weight: 600; cursor: pointer; }
+.nav-links a { color: #004d40; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; }
