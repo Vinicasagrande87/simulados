@@ -1,0 +1,42 @@
+<div class="login-container">
+  <header class="page-header">
+    <h1 class="main-title animado">Gestão de Simulados</h1>
+  </header>
+
+  <main class="login-card" style="max-width: 900px; width: 95%;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <p style="color: #666; margin: 0;">Visualize e gerencie os simulados disponíveis no sistema.</p>
+      <button class="btn-entrar" style="width: auto; padding: 10px 25px;" routerLink="/novo-simulado">
+        + Criar Simulado
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="simulados-table">
+        <thead>
+          <tr>
+            <th>Título do Simulado</th>
+            <th>Qtd. Questões</th>
+            <th>Data de Criação</th>
+            <th style="text-align: center;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let simulado of simulados">
+            <td>{{ simulado.titulo }}</td>
+            <td>{{ simulado.questoes_count }}</td>
+            <td>{{ simulado.data_criacao | date:'dd/MM/yyyy' }}</td>
+            <td class="acoes-buttons">
+              <button class="btn-acao editar" (click)="editar(simulado.id)">Editar</button>
+              <button class="btn-acao excluir" (click)="excluir(simulado.id)">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn-entrar" style="margin-top: 25px; background: #6c757d;" (click)="voltar()">
+      Voltar para Home
+    </button>
+  </main>
+</div>

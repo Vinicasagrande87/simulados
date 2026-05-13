@@ -1,0 +1,52 @@
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.simulados-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  text-align: left;
+}
+
+.simulados-table th {
+  background-color: #004d40;
+  color: white;
+  padding: 15px;
+  font-weight: 500;
+}
+
+.simulados-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.simulados-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.acoes-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-acao {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.btn-acao:hover {
+  opacity: 0.7;
+}
+
+.editar { color: #004d40; }
+.excluir { color: #dc3545; }

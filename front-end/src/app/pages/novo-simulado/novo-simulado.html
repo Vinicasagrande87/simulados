@@ -1,0 +1,34 @@
+<div class="login-container">
+  <header class="page-header">
+    <h1 class="main-title animado">Criar Questão</h1>
+  </header>
+
+  <main class="login-card" style="max-width: 600px;">
+    <form (ngSubmit)="salvarQuestao()">
+      <div class="input-group">
+        <label>Título do Simulado</label>
+        <input type="text" [(ngModel)]="questao['titulo_simulado']" name="titulo" placeholder="Ex: Anatomia Cardiovascular" required>
+      </div>
+
+      <div class="input-group">
+        <label>Enunciado da Pergunta</label>
+        <textarea [(ngModel)]="questao['enunciado']" name="enunciado" rows="3" placeholder="Digite a pergunta aqui..." required></textarea>
+      </div>
+
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+      <label style="font-weight: bold; color: #004d40; display: block; margin-bottom: 10px;">Alternativas (Marque a correta):</label>
+
+      <div class="alternativa-row" *ngFor="let letra of ['a','b','c','d','e']">
+        <input type="radio" name="correta" [value]="letra" [(ngModel)]="questao['correta']">
+        <span class="letra-label">{{ letra.toUpperCase() }})</span>
+        <input type="text" [(ngModel)]="questao['alternativa_' + letra]" [name]="letra" placeholder="Texto da alternativa..." required>
+      </div>
+
+      <div class="actions" style="margin-top: 30px; display: flex; gap: 10px;">
+        <button type="submit" class="btn-entrar">Salvar Questão</button>
+        <button type="button" class="btn-entrar" style="background: #6c757d;" routerLink="/home">Cancelar</button>
+      </div>
+    </form>
+  </main>
+</div>
