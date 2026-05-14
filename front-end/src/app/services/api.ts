@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // URL do seu Back-end oficial no Render
-  private readonly API_URL = 'https://simulados.onrender.com'; 
+  // URL ATUALIZADA: Apontando para o back-end correto no Render
+  private readonly API_URL = 'https://simulado-medicina-back.onrender.com'; 
 
   constructor(private http: HttpClient) { }
 
