@@ -6,9 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  // ALTERADO: Agora aponta para o seu computador onde o Back-end novo está rodando
-  // Quando você fizer o deploy final, você volta para a URL do Render
-  private readonly API_URL = 'http://localhost:3000'; 
+  // URL do seu Back-end oficial no Render
+  private readonly API_URL = 'https://simulados.onrender.com'; 
 
   constructor(private http: HttpClient) { }
 
