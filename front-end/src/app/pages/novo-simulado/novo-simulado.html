@@ -1,34 +1,39 @@
 <div class="login-container">
-  <header class="page-header">
-    <h1 class="main-title animado">Criar Questão</h1>
+  <header class="main-title animado">
+    Novo Simulado
   </header>
 
-  <main class="login-card" style="max-width: 600px;">
-    <form (ngSubmit)="salvarQuestao()">
+  <div class="login-card questao-card">
+    <form (ngSubmit)="salvarSimulado()">
+      
       <div class="input-group">
-        <label>Título do Simulado</label>
-        <input type="text" [(ngModel)]="questao['titulo_simulado']" name="titulo" placeholder="Ex: Anatomia Cardiovascular" required>
+        <label class="label-principal">Título do Simulado</label>
+        <input type="text" [(ngModel)]="simulado.titulo" name="titulo" placeholder="Ex: Simulado Geral">
       </div>
 
       <div class="input-group">
-        <label>Enunciado da Pergunta</label>
-        <textarea [(ngModel)]="questao['enunciado']" name="enunciado" rows="3" placeholder="Digite a pergunta aqui..." required></textarea>
+        <label class="label-principal">Enunciado da Questão</label>
+        <textarea [(ngModel)]="questao.texto" name="enunciado" rows="2" placeholder="Digite aqui..."></textarea>
       </div>
 
-      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-
-      <label style="font-weight: bold; color: #004d40; display: block; margin-bottom: 10px;">Alternativas (Marque a correta):</label>
-
-      <div class="alternativa-row" *ngFor="let letra of ['a','b','c','d','e']">
-        <input type="radio" name="correta" [value]="letra" [(ngModel)]="questao['correta']">
-        <span class="letra-label">{{ letra.toUpperCase() }})</span>
-        <input type="text" [(ngModel)]="questao['alternativa_' + letra]" [name]="letra" placeholder="Texto da alternativa..." required>
+      <div class="alternativas-section">
+        <label class="label-principal">Alternativas (A a D)</label>
+        <div *ngFor="let alt of alternativas; let i = index" class="alternativa-row">
+          <span class="letra-label">{{ ['A','B','C','D'][i] }}</span>
+          <input type="text" [(ngModel)]="alt.texto" [name]="'alt'+i" placeholder="Texto...">
+          <input type="radio" [value]="i" [(ngModel)]="questao.correta_index" name="correta">
+        </div>
       </div>
 
-      <div class="actions" style="margin-top: 30px; display: flex; gap: 10px;">
-        <button type="submit" class="btn-entrar">Salvar Questão</button>
-        <button type="button" class="btn-entrar" style="background: #6c757d;" routerLink="/home">Cancelar</button>
+      <button type="submit" class="btn-entrar">Salvar Simulado</button>
+
+      <div class="opcoes-extras">
+        <a (click)="voltar()" class="link-voltar">← Voltar para Gestão</a>
       </div>
     </form>
-  </main>
+  </div>
+
+  <footer class="footer-copy">
+    © 2026 - ULBRA
+  </footer>
 </div>

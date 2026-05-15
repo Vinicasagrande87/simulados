@@ -4,6 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api';
 
+interface Alternativa {
+  texto: string;
+}
+
+interface Questao {
+  texto: string;
+  correta_index: number | null;
+}
+
 @Component({
   selector: 'app-novo-simulado',
   standalone: true,
@@ -12,22 +21,31 @@ import { ApiService } from '../../services/api';
   styleUrls: ['./novo-simulado.css']
 })
 export class NovoSimuladoComponent {
-  questao: { [key: string]: any } = {
-    titulo_simulado: '',
-    enunciado: '',
-    alternativa_a: '',
-    alternativa_b: '',
-    alternativa_c: '',
-    alternativa_d: '',
-    alternativa_e: '',
-    correta: 'a'
-  };
+  
+  simulado = { titulo: '' };
+  questao: Questao = { texto: '', correta_index: null };
+  
+  // Agora apenas 4 alternativas (A, B, C, D)
+  alternativas: Alternativa[] = [
+    { texto: '' }, 
+    { texto: '' }, 
+    { texto: '' }, 
+    { texto: '' }
+  ];
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  salvarQuestao() {
-    console.log('Salvando questão para o banco:', this.questao);
-    alert('Questão registrada!');
-    this.router.navigate(['/home']);
+  salvarSimulado(): void {
+    if (this.questao.correta_index === null) {
+      alert('Por favor, selecione a alternativa correta.');
+      return;
+    }
+    console.log('Salvando Simulado...');
+    alert('Questão registrada com sucesso!');
+    this.router.navigate(['/gestao-simulados']);
+  }
+
+  voltar(): void {
+    this.router.navigate(['/gestao-simulados']);
   }
 }

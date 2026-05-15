@@ -1,34 +1,96 @@
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px; /* Reduzido */
+  background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
+  box-sizing: border-box;
+}
+
+.main-title.animado {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1.1rem; /* Menor */
+  margin: 5px 0;
+}
+
+.login-card.questao-card {
+  background: #ffffff;
+  padding: 10px 15px; /* Super compacto */
+  border-radius: 10px;
+  width: 95%;
+  max-width: 400px;
+}
+
+.label-principal {
+  display: block;
+  color: #004d40;
+  font-weight: bold;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 6px; /* Espaço entre campos reduzido */
+  box-sizing: border-box;
+}
+
+textarea { resize: none; }
+
+/* ALTERNATIVAS COLADINHAS */
 .alternativa-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 5px;
+  margin-bottom: 3px; /* Espaço mínimo entre A, B, C e D */
+  padding: 2px;
 }
 
 .letra-label {
   font-weight: bold;
-  color: #004d40;
-  min-width: 25px;
+  color: #d4a017;
+  font-size: 12px;
+  min-width: 15px;
 }
 
-textarea {
+/* BOTÃO SALVAR */
+.btn-entrar {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: inherit;
-  resize: vertical;
-}
-
-.alternativa-row input[type="text"] {
-  flex: 1;
   padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  background-color: #d4a017;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 8px;
 }
 
-.alternativa-row input[type="radio"] {
-  width: 20px;
-  height: 20px;
+/* LINK VOLTAR */
+.opcoes-extras {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.link-voltar {
+  color: #d4a017;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: bold;
   cursor: pointer;
+}
+
+.footer-copy {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 9px;
 }

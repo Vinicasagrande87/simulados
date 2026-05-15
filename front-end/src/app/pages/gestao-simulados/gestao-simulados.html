@@ -3,11 +3,11 @@
     <h1 class="main-title animado">Gestão de Simulados</h1>
   </header>
 
-  <main class="login-card" style="max-width: 900px; width: 95%;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <p style="color: #666; margin: 0;">Visualize e gerencie os simulados disponíveis no sistema.</p>
-      <button class="btn-entrar" style="width: auto; padding: 10px 25px;" routerLink="/novo-simulado">
-        + Criar Simulado
+  <main class="login-card gestao-card">
+    <div class="header-acoes">
+      <p class="subtitulo">Gerencie os simulados do sistema.</p>
+      <button class="btn-novo" routerLink="/novo-simulado">
+        + Novo Simulado
       </button>
     </div>
 
@@ -15,10 +15,10 @@
       <table class="simulados-table">
         <thead>
           <tr>
-            <th>Título do Simulado</th>
-            <th>Qtd. Questões</th>
-            <th>Data de Criação</th>
-            <th style="text-align: center;">Ações</th>
+            <th>Título</th>
+            <th>Questões</th>
+            <th>Data</th>
+            <th class="text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -35,8 +35,10 @@
       </table>
     </div>
 
-    <button class="btn-entrar" style="margin-top: 25px; background: #6c757d;" (click)="voltar()">
-      Voltar para Home
-    </button>
+    <footer class="opcoes-extras">
+      <nav class="nav-links">
+        <a (click)="voltar()" role="button" class="link-voltar">← Voltar para Home</a>
+      </nav>
+    </footer>
   </main>
 </div>

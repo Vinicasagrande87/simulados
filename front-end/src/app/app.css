@@ -1,32 +1,58 @@
-/* Garante que o fundo cubra a tela toda, mesmo atrás do rodapé */
+/* Garante que o fundo cubra a tela toda */
 html, body {
   height: 100% !important;
   margin: 0;
   padding: 0;
   background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
-  overflow: hidden; /* Evita que a página fique "sambando" */
+  overflow: hidden;
 }
 
-/* Container que segura o Header, Main e Footer */
-.app-container {
+/* O ion-app é o container raiz do Ionic */
+ion-app {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Altura total da tela */
+  height: 100vh;
+  background: transparent !important;
 }
 
-/* O segredo: flex: 1 faz o meio da página crescer e centralizar a rosa */
+/* Header e Logo */
+.header-fixo {
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+  z-index: 10;
+  flex-shrink: 0; /* Não deixa o header encolher */
+}
+
+.logo-topo {
+  max-width: 120px;
+  height: auto;
+}
+
+/* Área central onde a Rosa aparece */
 .main-content {
   flex: 1; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block; /* Mudado de flex para block para o Ionic gerenciar melhor */
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Estilo do Rodapé */
+/* Rodapé */
 .footer-ulbra {
   background-color: rgba(33, 37, 41, 0.9);
   color: white;
-  padding: 15px 0;
+  padding: 12px 0;
   text-align: center;
   width: 100%;
+  font-size: 11px;
+  z-index: 10;
+  flex-shrink: 0; /* Não deixa o footer encolher */
+}
+
+/* Ajuste para o componente de rota do Ionic */
+ion-router-outlet {
+  height: 100%;
+  width: 100%;
+  display: block;
 }

@@ -1,38 +1,119 @@
+/* 1. CONTAINER PADRONIZADO */
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
+}
+
+/* 2. TÍTULO */
+.main-title.animado {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.main-title.animado::before, .main-title.animado::after {
+  content: ""; 
+  width: 30px; height: 30px;
+  background: url('/assets/simbol-med.png') no-repeat center/contain;
+  animation: girarMedicina 7s linear infinite;
+}
+
+@keyframes girarMedicina {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 3. O CARD DE GESTÃO (MAIS LARGO) */
+.login-card.gestao-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 15px;
+  width: 95%;
+  max-width: 900px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.header-acoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subtitulo {
+  color: #555;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-novo {
+  background-color: goldenrod;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-novo:hover {
+  transform: scale(1.05);
+  background-color: #daa520;
+}
+
+/* 4. TABELA RESPONSIVA */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid #eee;
 }
 
 .simulados-table {
   width: 100%;
+  min-width: 500px;
   border-collapse: collapse;
-  background: white;
   text-align: left;
 }
 
 .simulados-table th {
   background-color: #004d40;
   color: white;
-  padding: 15px;
-  font-weight: 500;
+  padding: 12px;
+  font-size: 14px;
 }
 
 .simulados-table td {
-  padding: 15px;
+  padding: 12px;
   border-bottom: 1px solid #eee;
   color: #333;
-}
-
-.simulados-table tr:hover {
-  background-color: #f9f9f9;
+  font-size: 14px;
 }
 
 .acoes-buttons {
   display: flex;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .btn-acao {
@@ -40,13 +121,31 @@
   background: none;
   cursor: pointer;
   font-weight: bold;
-  font-size: 14px;
-  transition: opacity 0.2s;
-}
-
-.btn-acao:hover {
-  opacity: 0.7;
+  font-size: 13px;
+  padding: 5px;
 }
 
 .editar { color: #004d40; }
 .excluir { color: #dc3545; }
+
+/* 5. RODAPÉ COM O VOLTAR PADRONIZADO */
+.opcoes-extras {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  text-align: left;
+}
+
+.nav-links a {
+  color: goldenrod;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.text-center { text-align: center; }

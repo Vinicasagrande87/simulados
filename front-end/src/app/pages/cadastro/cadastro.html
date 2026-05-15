@@ -24,17 +24,18 @@
         <input type="password" id="senha" [(ngModel)]="usuario.senha" name="senha" placeholder="Crie uma senha" required>
       </div>
 
-      <div class="input-group">
-        <label for="curso">Curso</label>
-        <input type="text" id="curso" [(ngModel)]="usuario.curso" name="curso" placeholder="Ex: Medicina" required>
-      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="curso">Curso</label>
+          <input type="text" id="curso" [(ngModel)]="usuario.curso" name="curso" placeholder="Ex: Medicina" required>
+        </div>
 
-      <div class="input-group">
-        <label for="semestre">Semestre Atual</label>
-        <select id="semestre" [(ngModel)]="usuario.semestre" name="semestre" required class="select-ulbra">
-          <option [ngValue]="null" disabled selected>Selecione</option>
-          <option *ngFor="let s of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="s">{{s}}º Semestre</option>
-        </select>
+        <div class="input-group half">
+          <label for="semestre">Semestre</label>
+          <select id="semestre" [(ngModel)]="usuario.semestre" name="semestre" required class="select-ulbra">
+            <option [ngValue]="null" disabled selected></option> <option *ngFor="let s of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="s">{{s}}º</option>
+          </select>
+        </div>
       </div>
 
       <button type="submit" class="btn-entrar">Finalizar Cadastro</button>

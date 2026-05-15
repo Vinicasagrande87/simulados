@@ -1,32 +1,38 @@
+/* 1. RESET E CONTAINER PRINCIPAL */
 .login-container {
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; 
   align-items: center;
-  background-image: url('/assets/fundo app.png'); 
-  background-size: cover;
-  background-position: center;
+  padding: 5px; /* Reduzido para dar mais espaço */
+  box-sizing: border-box;
+  background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
 }
 
+/* 2. TÍTULO - AGORA MAIS EM CIMA */
 .main-title.animado {
   color: #FFD700;
-  font-size: 2.2rem;
+  font-size: clamp(1.0rem, 4vw, 1.8rem);
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  gap: 10px;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-  margin-bottom: 20px;
+  margin-top: 5px; /* Reduzido para subir mais */
+  margin-bottom: 8px;
+  width: 100%;
 }
 
 .main-title.animado::before, .main-title.animado::after {
   content: ""; 
-  width: 40px; height: 40px;
-  background-image: url('/assets/simbol-med.png'); 
-  background-size: contain;
+  width: 25px; 
+  height: 25px;
+  background: url('/assets/simbol-med.png') no-repeat center/contain;
   animation: girarMedicina 7s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes girarMedicina {
@@ -34,43 +40,85 @@
   to { transform: rotate(360deg); }
 }
 
+/* 3. O CARD COMPACTO */
 .login-card {
   background: rgba(255, 255, 255, 0.95);
-  padding: 30px;
+  padding: 10px 20px; /* Reduzi o padding superior e inferior */
   border-radius: 15px;
-  width: 90%;
-  max-width: 400px;
+  width: 100%;
+  max-width: 380px;
   text-align: center;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
-.logo-ulbra { width: 180px; margin-bottom: 20px; }
+.logo-ulbra { 
+  width: 100px; /* Reduzi um pouco a logo para economizar altura */
+  margin-bottom: 8px; 
+}
 
-.input-group { text-align: left; margin-bottom: 15px; }
-.input-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+/* 4. FORMULÁRIO */
+.input-group { 
+  text-align: left; 
+  margin-bottom: 6px; 
+}
+
+.input-group label { 
+  display: block; 
+  font-weight: 700; 
+  font-size: 11px; 
+  color: goldenrod;
+  margin-bottom: 2px; 
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.input-row .input-group {
+  flex: 2;
+}
+
+.input-row .input-group.half {
+  flex: 1;
+}
 
 input, .select-ulbra {
   width: 100%;
-  padding: 12px;
+  padding: 8px 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 16px;
   box-sizing: border-box;
+  background-color: white;
 }
 
 .btn-entrar {
   width: 100%;
-  padding: 14px;
-  background-color: #ffc107;
+  padding: 12px;
+  background-color: goldenrod;
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  margin-top: 5px;
 }
 
+/* 5. LINKS */
 .opcoes-extras {
-  margin-top: 15px;
+  margin-top: 8px;
   border-top: 1px solid #eee;
-  padding-top: 10px;
+  padding-top: 5px;
 }
 
-.nav-links a { color: #004d40; text-decoration: none; font-size: 13px; font-weight: 600; cursor: pointer; }
+.nav-links a { 
+  color: goldenrod; 
+  text-decoration: none; 
+  font-size: 12px; 
+  font-weight: 600; 
+  cursor: pointer; 
+}

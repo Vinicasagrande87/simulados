@@ -6,18 +6,17 @@
   </header>
 
   <main class="login-card">
-    <header class="card-header">
+    <div class="logo-container">
       <img src="assets/logo-ulbra.png" alt="Logo Ulbra" class="logo-ulbra">
-    </header>
+    </div>
 
     <form (ngSubmit)="modo === 'login' ? fazerLogin() : recuperarSenha()">
-      
       <div class="input-group">
         <label for="email">E-mail</label>
         <input type="email" id="email" [(ngModel)]="usuario.email" name="email" placeholder="exemplo@ulbra.br" required>
       </div>
 
-      <div class="input-group" *ngIf="modo !== 'recuperar'">
+      <div class="input-group" *ngIf="modo === 'login'">
         <label for="senha">Senha</label>
         <input type="password" id="senha" [(ngModel)]="usuario.senha" name="senha" placeholder="Sua senha" required>
       </div>
@@ -31,9 +30,11 @@
 
     <footer class="opcoes-extras">
       <nav class="nav-links">
-        <a routerLink="/cadastro" *ngIf="modo === 'login'">Ainda não tenho conta</a>
-        <a (click)="modo = 'recuperar'" *ngIf="modo === 'login'" role="button">Esqueci minha senha</a>
-        <a (click)="modo = 'login'" *ngIf="modo !== 'login'" role="button" class="link-voltar">Voltar para o Login</a>
+        <ng-container *ngIf="modo === 'login'">
+          <a routerLink="/cadastro">Ainda não tenho conta</a>
+          <a (click)="modo = 'recuperar'" role="button">Esqueci minha senha</a>
+        </ng-container>
+        <a (click)="modo = 'login'" *ngIf="modo !== 'login'" role="button">Voltar para o Login</a>
       </nav>
     </footer>
   </main>

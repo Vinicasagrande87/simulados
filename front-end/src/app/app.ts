@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { IonicModule } from '@ionic/angular'; // Importação necessária
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [CommonModule, IonicModule], // Adicionado IonicModule aqui
   templateUrl: './app.html', 
   styleUrl: './app.css'
 })

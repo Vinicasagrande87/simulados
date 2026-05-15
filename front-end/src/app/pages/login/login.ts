@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router'; // Importante para o routerLink funcionar
+import { Router, RouterModule } from '@angular/router'; 
 import { ApiService } from '../../services/api';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, IonicModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
@@ -21,7 +22,7 @@ export class LoginComponent {
     this.apiService.login({ email: this.usuario.email, senha: this.usuario.senha }).subscribe({
       next: (res: any) => {
         this.apiService.setUsuarioLogado(res);
-        this.router.navigate(['/home']); // Navega para a Rosa Interativa
+        this.router.navigate(['/home']); 
       },
       error: () => alert('E-mail ou senha incorretos.')
     });

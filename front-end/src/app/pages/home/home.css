@@ -1,55 +1,104 @@
-/* Container que centraliza a rosa na tela entre header e footer */
-.rosa-container {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 80vh; /* Mantém a altura para centralização */
-  overflow: hidden;
+/* Bloqueia rolagem globalmente para esta página */
+ion-content {
+  --overflow: hidden;
 }
 
-.canvas {
+/* Container Principal */
+.rosa-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%; /* Mudado para height 100% para travar no viewport */
+  text-align: center;
+  overflow: hidden; /* Garante que nada saia do container */
+}
+
+/* Header de Boas-vindas */
+.welcome-header {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.welcome-header h2 {
+  color: white;
+  font-weight: bold;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 10px;
+}
+
+.welcome-header h2 span {
+  color: #ffcc00;
+}
+
+.admin-text {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+/* Seção Central da Rosa */
+.canvas-section {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas-relative {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* O "Rótulo" flutuante (Tooltip) que segue o mouse */
+/* ESTILIZAÇÃO DA ROSA */
+.rosa-svg {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+  margin: 20px 0;
+  display: block; 
+}
+
+/* Pétalas e Interatividade */
+path {
+  fill: #ffcc00 !important;
+  stroke: none !important;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+path:hover {
+  fill: #fff0b3 !important;
+}
+
+/* Tooltip */
 .tooltip {
-  position: fixed; /* Fixed para não quebrar o layout */
-  display: none;
-  background-color: #ffcc00; /* Amarelo Ulbra */
-  color: #00241c; /* Verde escuro para contraste */
+  position: fixed;
+  background-color: #ffcc00;
+  color: #00241c;
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 800;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  pointer-events: none; /* Mouse ignora o texto */
+  font-size: 14px;
+  text-transform: uppercase;
+  pointer-events: none;
   z-index: 9999;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-  text-transform: uppercase;
-  font-size: 14px;
-  white-space: nowrap;
   border: 1px solid #00241c;
 }
 
-/* Estilização do SVG */
-svg {
-  width: 550px !important; /* Tamanho espetacular da rosa */
-  height: auto;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6)); /* Sombra para profundidade */
+/* Footer e Botão Sair */
+.footer-actions {
+  margin-top: auto;
+  width: 100%;
+  padding-bottom: 20px;
 }
 
-/* --- O AJUSTE DOS 100% ESTÁ AQUI --- */
-path {
-  fill: #ffcc00 !important; /* Amarelo puro */
-  stroke: none !important;  /* REMOVIDA A BORDA BRANCA! */
-  cursor: pointer;
-  transition: fill 0.2s ease; /* Transição suave apenas na cor */
-}
-
-/* Efeito quando passa o mouse na pétala */
-path:hover {
-  fill: #fff0b3 !important; /* Amarelo clarinho ao tocar */
+.logout-btn {
+  --color: #ffffff;
+  font-weight: bold;
 }
