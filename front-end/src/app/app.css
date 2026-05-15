@@ -1,27 +1,23 @@
-/* Garante que o fundo cubra a tela toda */
 html, body {
-  height: 100% !important;
+  height: 100%;
   margin: 0;
   padding: 0;
   background: radial-gradient(circle, #004d40 0%, #00241c 100%) no-repeat fixed;
-  overflow: hidden;
 }
 
-/* O ion-app é o container raiz do Ionic */
 ion-app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background: transparent !important;
 }
 
-/* Header e Logo */
 .header-fixo {
   width: 100%;
   padding: 15px 0;
   text-align: center;
-  z-index: 10;
-  flex-shrink: 0; /* Não deixa o header encolher */
+  flex-shrink: 0;
+  z-index: 100;
 }
 
 .logo-topo {
@@ -29,16 +25,22 @@ ion-app {
   height: auto;
 }
 
-/* Área central onde a Rosa aparece */
 .main-content {
-  flex: 1; 
-  display: block; /* Mudado de flex para block para o Ionic gerenciar melhor */
+  flex: 1;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   position: relative;
-  overflow: hidden;
 }
 
-/* Rodapé */
+/* Garante que o conteúdo da rota ocupe o espaço e seja visível */
+ion-router-outlet {
+  display: block;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
 .footer-ulbra {
   background-color: rgba(33, 37, 41, 0.9);
   color: white;
@@ -46,13 +48,6 @@ ion-app {
   text-align: center;
   width: 100%;
   font-size: 11px;
-  z-index: 10;
-  flex-shrink: 0; /* Não deixa o footer encolher */
-}
-
-/* Ajuste para o componente de rota do Ionic */
-ion-router-outlet {
-  height: 100%;
-  width: 100%;
-  display: block;
+  flex-shrink: 0;
+  z-index: 100;
 }

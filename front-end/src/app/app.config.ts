@@ -1,14 +1,15 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http'; // Importando o módulo de comunicação HTTP
-
 import { routes } from './app.routes';
-import { provideIonicAngular } from '@ionic/angular/standalone';
+import { provideHttpClient } from '@angular/common/http';
+import { IonicModule } from '@ionic/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    provideIonicAngular({}), // Habilita o Angular a conversar com o seu Back-end (Node/Express)
-  ],
+    importProvidersFrom(IonicModule.forRoot({
+      mode: 'md' // Força o modo Material Design para garantir consistência visual
+    }))
+  ]
 };
